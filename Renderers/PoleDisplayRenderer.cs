@@ -17,6 +17,8 @@ namespace RoguePoleDisplay.Renderers
 
         public void Write(string text)
         {
+            //_line1 = line1.PadRight(20).Substring(0, 20);
+            //_line2 = line2.PadRight(20).Substring(0, 20);
             _poleDisplay.Write(text);
         }
 

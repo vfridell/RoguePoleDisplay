@@ -59,15 +59,9 @@
     <Compile Include="Renderers\PoleDisplayRenderer.cs" />
     <Compile Include="Renderers\RendererFactory.cs" />
     <Compile Include="Repositories\Memory.cs" />
-    <Compile Include="GameLoop.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="LeapListeners\PoleDisplayMenuListener.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />
-    <Compile Include="MenuStates\Choosing.cs" />
-    <Compile Include="MenuStates\Chosen.cs" />
-    <Compile Include="MenuStates\MenuShow.cs" />
-    <Compile Include="MenuStates\MenuState.cs" />
     <Compile Include="PoleDisplay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,9 +70,6 @@
     <Compile Include="Routines\PersonID.cs" />
     <Compile Include="Routines\Routine.cs" />
     <Compile Include="Routines\RoutineFactory.cs" />
-    <Compile Include="Screens\BasicScreen.cs" />
-    <Compile Include="Screens\TypingScreen.cs" />
-    <Compile Include="Screens\IScreen.cs" />
     <Compile Include="StateOfMind.cs" />
     <Compile Include="Utilities\IndexIncrement.cs" />
   </ItemGroup>

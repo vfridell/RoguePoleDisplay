@@ -27,7 +27,7 @@ namespace RoguePoleDisplay.Routines
                 face.SlowTalk("Lets see...");
                 foreach (string question in Memory.GetInstance().QuestionsWithAnswers)
                 {
-                    Interaction answer = face.GetSingleValue(question, 30000);
+                    Interaction answer = face.GetSingleValue(question, millisecondTimeout: 30000);
                     Interaction player = Memory.GetInstance().Remember(answer.displayText, true);
                     if (answer.resultValue == player.resultValue)
                     {
@@ -35,7 +35,7 @@ namespace RoguePoleDisplay.Routines
                         face.Talk("I knew you'd be back.");
                         return player;
                     }
-                    face.Talk("Oh.", 2000);
+                    face.Talk("Oh.", millisecondTimeout: 2000);
                     face.TalkInCircles(5000, "No, That's not right.", "Nope");
                     Interaction knowYou = Memory.GetInstance().Remember("Do I know you?");
                     if (null == knowYou) knowYou = face.YesNo("Do I know you?");

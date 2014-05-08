@@ -24,32 +24,35 @@ namespace RoguePoleDisplay
             _input = input;
         }
 
-        public Interaction SlowTalk(string text, int msTypingDelay = 200, int millisecondTimeout = 5000)
+        public Interaction SlowTalk(string line1, string line2 = "", int msTypingDelay = 200, int millisecondTimeout = 5000)
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.SlowType(text, msTypingDelay);
-            result.displayText = text;
+            _renderer.SlowType(line1, msTypingDelay);
+            _renderer.SlowType(line2, msTypingDelay);
+            result.displayText = (line1 + " " + line2).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
         }
 
-        public Interaction Talk(string text, int millisecondTimeout = 5000)
+        public Interaction Talk(string line1, string line2 = "", int millisecondTimeout = 5000)
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(text);
-            result.displayText = text;
+            _renderer.Write(line1);
+            _renderer.Write(line2);
+            result.displayText = (line1 + " " + line2).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
         }
 
-        public Interaction RememberSingleValue(string text, bool longTerm = false, int millisecondTimeout = 5000)
+        public Interaction RememberSingleValue(string line1, string line2 = "", bool longTerm = false, int millisecondTimeout = 5000)
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(text);
-            result.displayText = text;
+            _renderer.Write(line1);
+            _renderer.Write(line2);
+            result.displayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
             {
@@ -63,12 +66,13 @@ namespace RoguePoleDisplay
 
         }
 
-        public Interaction GetSingleValue(string text, int millisecondTimeout = 5000)
+        public Interaction GetSingleValue(string line1, string line2 = "", int millisecondTimeout = 5000)
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(text);
-            result.displayText = text;
+            _renderer.Write(line1);
+            _renderer.Write(line2);
+            result.displayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
             {
@@ -78,14 +82,14 @@ namespace RoguePoleDisplay
             return result;
         }
 
-        public Interaction YesNo(string text, bool longTerm = false, int millisecondTimeout = 10000)
+        public Interaction YesNo(string line1, bool longTerm = false, int millisecondTimeout = 10000)
         {
             Menu menu = new MenuYesNo();
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(text);
+            _renderer.Write(line1);
             _renderer.DisplayMenu(menu);
-            result.displayText = text;
+            result.displayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
             result.resultValue = item.choiceNumber;
 
@@ -95,7 +99,7 @@ namespace RoguePoleDisplay
             return result;
         }
 
-        public Interaction Remembrance(string textTemplate, bool longTerm = true, int millisecondTimeout = 5000, params string[] memoryKeys)
+        public Interaction Remembrance(string line1, string line2 = "", bool longTerm = true, int millisecondTimeout = 5000, params string[] memoryKeys)
         {
             List<object> rememberedValues = new List<object>();
             foreach (string s in memoryKeys)
@@ -106,9 +110,12 @@ namespace RoguePoleDisplay
             }
 
             Interaction result = new Interaction();
-            result.displayText = string.Format(textTemplate, rememberedValues.ToArray());
             _renderer.Clear();
-            _renderer.Write(result.displayText);
+            string line1Formatted = string.Format(line1, rememberedValues.ToArray());
+            string line2Formatted = string.Format(line2, rememberedValues.ToArray());
+            _renderer.Write(line1Formatted);
+            _renderer.Write(line2Formatted);
+            result.displayText = (line1Formatted + " " + line2Formatted).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
         }

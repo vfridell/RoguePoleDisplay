@@ -28,7 +28,7 @@ namespace RoguePoleDisplay.Routines
                 return new Interaction() { success = false };
             }
 
-            Interaction newPlayer = face.RememberSingleValue(question, true);
+            Interaction newPlayer = face.RememberSingleValue(question, longTerm: true);
             face.Talk("Great!");
             return newPlayer;
         }
