@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputListeners\ConsoleListener.cs" />
+    <Compile Include="InputListeners\InputListener.cs" />
+    <Compile Include="InputListeners\LeapInputListener.cs" />
     <Compile Include="Input\InputFactory.cs" />
     <Compile Include="Input\LeapInput.cs" />
     <Compile Include="Face.cs" />
@@ -59,7 +62,6 @@
     <Compile Include="Renderers\PoleDisplayRenderer.cs" />
     <Compile Include="Renderers\RendererFactory.cs" />
     <Compile Include="Repositories\Memory.cs" />
-    <Compile Include="LeapListeners\PoleDisplayMenuListener.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="PoleDisplay.cs" />

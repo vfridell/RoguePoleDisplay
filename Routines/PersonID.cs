@@ -36,7 +36,7 @@ namespace RoguePoleDisplay.Routines
                         return player;
                     }
                     face.Talk("Oh.", millisecondTimeout: 2000);
-                    face.TalkInCircles(5000, "No, That's not right.", "Nope");
+                    face.TalkInCircles(5000, "No", "That's not right", "Nope");
                     Interaction knowYou = Memory.GetInstance().Remember("Do I know you?");
                     if (null == knowYou) knowYou = face.YesNo("Do I know you?");
                     if (knowYou.playerAnswer == Interaction.Answer.No)

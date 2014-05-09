@@ -33,15 +33,12 @@ namespace RoguePoleDisplay.Input
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
             int choice;
+            Console.Write("Enter choice: ");
             string val = Reader.ReadLine(millisecondTimeout);
-            while (false == int.TryParse(val, out choice) || !menu.ValidChoice(choice))
-            {
-                Console.WriteLine("Bad choice");
-                Console.Write("Enter choice: ");
-                val = Console.ReadLine();
-            }
-
-            return menu.GetMenuItem(choice);
+            if (!int.TryParse(val, out choice) || !menu.ValidChoice(choice))
+                return menu.GetMenuItem(choice);
+            else
+                return null;
         }
     }
 
@@ -50,39 +47,46 @@ namespace RoguePoleDisplay.Input
     /// </summary>
     class Reader
     {
-        private static Thread inputThread;
-        private static AutoResetEvent getInput, gotInput;
-        private static string input;
+        private static Thread _inputThread;
+        private static AutoResetEvent _getInput, _gotInput;
+        private static string _input;
 
         static Reader()
         {
-            inputThread = new Thread(reader);
-            inputThread.IsBackground = true;
-            getInput = new AutoResetEvent(false);
-            gotInput = new AutoResetEvent(false);
+            _inputThread = new Thread(reader);
+            _inputThread.IsBackground = true;
+            _getInput = new AutoResetEvent(false);
+            _gotInput = new AutoResetEvent(false);
         }
 
         public static void Start()
         {
-            inputThread.Start();
+            _inputThread.Start();
         }
 
         private static void reader()
         {
-            while (true)
+            try
             {
-                getInput.WaitOne();
-                input = Console.ReadLine();
-                gotInput.Set();
+                while (true)
+                {
+                    _getInput.WaitOne();
+                    _input = Console.ReadLine();
+                    _gotInput.Set();
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO how to handle?
             }
         }
 
         public static string ReadLine(int timeOutMillisecs)
         {
-            getInput.Set();
-            bool success = gotInput.WaitOne(timeOutMillisecs);
+            _getInput.Set();
+            bool success = _gotInput.WaitOne(timeOutMillisecs);
             if (success)
-                return input;
+                return _input;
             else
                 return "";
         }

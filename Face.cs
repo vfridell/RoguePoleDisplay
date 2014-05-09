@@ -91,7 +91,7 @@ namespace RoguePoleDisplay
             _renderer.DisplayMenu(menu);
             result.displayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
-            result.resultValue = item.choiceNumber;
+            if(null != item) result.resultValue = item.choiceNumber;
 
             if (result.resultValue != -1)
                 Memory.GetInstance().AddToMemory(result, longTerm);

@@ -7,6 +7,17 @@ namespace RoguePoleDisplay
 {
     public class Interaction
     {
+        public Interaction()
+        {
+            timestamp = DateTime.Now;
+        }
+
+        public Interaction(int resultVal)
+            : base()
+        {
+            resultValue = resultVal;
+        }
+
         public DateTime timestamp;
         public int resultValue = -1;
         public string displayText = "";
