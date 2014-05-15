@@ -20,7 +20,7 @@ namespace RoguePoleDisplay
         {
             if (!_initialized)
             {
-                _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
+                _serialPort = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
                 _serialPort.Open();
             }
         }
@@ -33,6 +33,20 @@ namespace RoguePoleDisplay
                 _poleDisplay = new PoleDisplay();
             }
             return _poleDisplay;
+        }
+
+        public void RPS10_Power_switch()
+        {
+            byte [] hammerTheEnterKey = {0x0d,0x0d};
+            byte [] togglePowerCommand = {0x02,0x18,0x18,0x02,0x18,0x18,0x30,0x54,0x0d};
+            byte [] readbuffer = new byte[1024];
+            int bytesRead;
+//            bytesRead = _serialPort.Read(readbuffer, 0, 1024);
+            _serialPort.Write(hammerTheEnterKey, 0, hammerTheEnterKey.Length);
+            System.Threading.Thread.Sleep(1000);
+            _serialPort.Write(togglePowerCommand, 0, togglePowerCommand.Length);
+            System.Threading.Thread.Sleep(1000);
+            bytesRead = _serialPort.Read(readbuffer, 0, 1024);
         }
 
         public enum DimLevel { LOWEST = '\x20', LOW = '\x40', HIGH = '\x60', HIGHEST = '\xFF' }
