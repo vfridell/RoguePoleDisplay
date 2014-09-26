@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Leap;
+using RoguePoleDisplay.Repositories;
+using RoguePoleDisplay.Routines;
 
 namespace RoguePoleDisplay
 {
@@ -12,25 +14,12 @@ namespace RoguePoleDisplay
     {
         static void Main(string[] args)
         {
+            StateOfMind stateOfMind = new StateOfMind();
+            Task gameLoopTask = Task.Run(() => stateOfMind.BecomeSelfAware());
+            Task.WaitAll(gameLoopTask);
 
-            PoleDisplay p = PoleDisplay.GetInstance();
-            p.Initialize();
-
-            p.RPS10_Power_switch();
-
-
-            //while (true)
-            //{
-            //    p.Write("Oh my gosh");
-            //}
-
-            //StateOfMind stateOfMind = new StateOfMind();
-            //Task gameLoopTask = Task.Run(() => stateOfMind.RunRoutine());
-
-            //Task.WaitAll(gameLoopTask);
-
-            //Console.WriteLine("Press Enter to quit...");
-            //Console.ReadLine();
+            Console.WriteLine("Press Enter to quit...");
+            Console.ReadLine();
         }
     }
 }

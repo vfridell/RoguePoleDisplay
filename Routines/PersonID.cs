@@ -6,43 +6,43 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Repositories;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay.Routines
 {
+    [RoutineType(RoutineType.Login, 0)]
     class PersonID : Routine
     {
-        public override void Init()
+        protected override RoutineResult RunConsciousRoutine()
         {
-            routineType = RoutineType.PersonID;
-        }
-
-        public override Interaction Run()
-        {
+            Memory memory = Memory.GetInstance();
             var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
             face.ResetIncrementer();
 
             face.Talk("I'm wondering if we've met before.");
-            if (Memory.GetInstance().QuestionsWithAnswers.Count > 0)
+            if (memory.GetKnownPlayers().Count > 0)
             {
                 face.SlowTalk("Lets see...");
-                foreach (string question in Memory.GetInstance().QuestionsWithAnswers)
+                foreach (Player player in memory.GetKnownPlayers())
                 {
-                    Interaction answer = face.GetSingleValue(question, millisecondTimeout: 30000);
-                    Interaction player = Memory.GetInstance().Remember(answer.displayText, true);
-                    if (answer.resultValue == player.resultValue)
+                    Interaction answer = face.GetSingleValue(player.Question, millisecondTimeout: 30000);
+                    if (answer.resultValue == player.Answer)
                     {
-                        face.Talk(string.Format("Hey, {0}!", player.playerName));
+                        face.Talk(string.Format("Hey, {0}!", player.Name));
                         face.Talk("I knew you'd be back.");
-                        return player;
+                        memory.CurrentPlayer = player;
+                        answer.player = player;
+                        return MakeRoutineResult(answer);
                     }
                     face.Talk("Oh.", millisecondTimeout: 2000);
                     face.TalkInCircles(5000, "No", "That's not right", "Nope");
-                    Interaction knowYou = Memory.GetInstance().Remember("Do I know you?");
+                    Interaction knowYou = memory.Remember("Do I know you?", null);
                     if (null == knowYou) knowYou = face.YesNo("Do I know you?");
                     if (knowYou.playerAnswer == Interaction.Answer.No)
                     {
                         face.Talk("Well, no wonder.");
-                        return new Interaction() { success = false };
+                        knowYou.success = false;
+                        return MakeRoutineResult(knowYou);
                     }
                     face.Talk("Well then, let's maybe try another");
                 }
@@ -52,7 +52,7 @@ namespace RoguePoleDisplay.Routines
             {
                 face.Talk("But I guess that's not possible");
             }
-            return new Interaction() { success = false };
+            return MakeRoutineResult(new Interaction() { success = false, resultValue = (int)Interaction.Answer.No });
         }
     }
 }

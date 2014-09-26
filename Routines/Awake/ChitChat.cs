@@ -8,21 +8,16 @@ using RoguePoleDisplay.Input;
 
 namespace RoguePoleDisplay.Routines
 {
+    [RoutineType(RoutineType.Awake)]
     class ChitChat : Routine
     {
-        public override void Init()
-        {
-            routineType = RoutineType.Awake;
-        }
-
-        public override Interaction Run()
+        protected override RoutineResult RunConsciousRoutine()
         {
             var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-
             face.Talk("So happy to be here!");
-            face.RememberSingleValue("What's new?");
+            Interaction i = face.RememberSingleValue("What's new?");
             face.Talk("Uh huh.");
-            return new Interaction();
+            return MakeRoutineResult(i);
         }
     }
 }

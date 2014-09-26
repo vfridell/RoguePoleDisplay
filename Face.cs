@@ -99,26 +99,26 @@ namespace RoguePoleDisplay
             return result;
         }
 
-        public Interaction Remembrance(string line1, string line2 = "", bool longTerm = true, int millisecondTimeout = 5000, params string[] memoryKeys)
-        {
-            List<object> rememberedValues = new List<object>();
-            foreach (string s in memoryKeys)
-            {
-                Interaction i = Memory.GetInstance().Remember(s, longTerm);
-                if(null != i)
-                    rememberedValues.Add(i.resultValue);
-            }
+        //public Interaction Remembrance(string line1, string line2 = "", bool longTerm = true, int millisecondTimeout = 5000, params string[] memoryKeys)
+        //{
+        //    List<object> rememberedValues = new List<object>();
+        //    foreach (string s in memoryKeys)
+        //    {
+        //        Interaction i = Memory.GetInstance().Remember(s, longTerm);
+        //        if(null != i)
+        //            rememberedValues.Add(i.resultValue);
+        //    }
 
-            Interaction result = new Interaction();
-            _renderer.Clear();
-            string line1Formatted = string.Format(line1, rememberedValues.ToArray());
-            string line2Formatted = string.Format(line2, rememberedValues.ToArray());
-            _renderer.Write(line1Formatted);
-            _renderer.Write(line2Formatted);
-            result.displayText = (line1Formatted + " " + line2Formatted).Trim();
-            Thread.Sleep(millisecondTimeout);
-            return result;
-        }
+        //    Interaction result = new Interaction();
+        //    _renderer.Clear();
+        //    string line1Formatted = string.Format(line1, rememberedValues.ToArray());
+        //    string line2Formatted = string.Format(line2, rememberedValues.ToArray());
+        //    _renderer.Write(line1Formatted);
+        //    _renderer.Write(line2Formatted);
+        //    result.displayText = (line1Formatted + " " + line2Formatted).Trim();
+        //    Thread.Sleep(millisecondTimeout);
+        //    return result;
+        //}
 
         public void ResetIncrementer()
         {

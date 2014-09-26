@@ -76,6 +76,11 @@ namespace RoguePoleDisplay.InputListeners
             }
         }
 
+        /// <summary>
+        /// Return the most frequently occurring value in a list
+        /// </summary>
+        /// <param name="intList"></param>
+        /// <returns></returns>
         private int Mode(List<int> intList)
         {
             // get a list of counts

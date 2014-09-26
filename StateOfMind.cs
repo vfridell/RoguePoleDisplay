@@ -3,31 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using RoguePoleDisplay.Routines;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay
 {
-    public class StateOfMind
+    public class StateOfMind 
     {
+        private static object _stateChangeLock = new object();
+
         public StateOfMind()
         {
         }
 
-        public void RunRoutine()
+        public void BecomeSelfAware()
         {
-            Routine idRoutine = new PersonID();
-            Routine secondOne;
-            idRoutine.Init();
-            Interaction result = idRoutine.Run();
-            if (string.IsNullOrEmpty(result.playerName))
-                secondOne = new CreatePlayer();
-            else
-                secondOne = new ChitChat();
+            Memory memory = Memory.GetInstance();
 
-            secondOne.Init();
-            secondOne.Run();
+            PoleDisplay p = PoleDisplay.GetInstance();
+            p.Initialize();
 
+            do
+            {
+                RoutineType routineType = memory.CurrentState.GetNextRoutineType();
+                Routine currentRoutine = RoutineFactory.GetRoutine(routineType);
+                RoutineResult result = currentRoutine.Run();
+                if (routineType == RoutineType.Login && !memory.PlayerLoggedIn())
+                {
+                    currentRoutine = RoutineFactory.GetCreateLoginRoutine();
+                    result = currentRoutine.Run();
+                }
+
+                if(memory.CurrentState.CheckForStateChange())
+                {
+                    Console.WriteLine("state changed to {0}", memory.CurrentState.GetType().Name);
+                }
+            } while (true);
         }
-        
+
     }
 }
