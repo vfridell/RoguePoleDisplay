@@ -21,19 +21,20 @@ namespace RoguePoleDisplay
         {
             Memory memory = Memory.GetInstance();
 
-            PoleDisplay p = PoleDisplay.GetInstance();
-            p.Initialize();
-
             do
             {
                 RoutineType routineType = memory.CurrentState.GetNextRoutineType();
                 Routine currentRoutine = RoutineFactory.GetRoutine(routineType);
                 RoutineResult result = currentRoutine.Run();
-                if (routineType == RoutineType.Login && !memory.PlayerLoggedIn())
+                if (routineType == RoutineType.Login 
+                    && !memory.PlayerLoggedIn()
+                    && result.FinalState != RoutineFinalState.Abandoned)
                 {
                     currentRoutine = RoutineFactory.GetCreateLoginRoutine();
                     result = currentRoutine.Run();
                 }
+
+                Console.WriteLine("routine result was " + result.FinalState.ToString());
 
                 if(memory.CurrentState.CheckForStateChange())
                 {

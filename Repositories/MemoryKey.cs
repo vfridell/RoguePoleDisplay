@@ -9,7 +9,8 @@ namespace RoguePoleDisplay.Repositories
 {
     public class MemoryKey : IEquatable<MemoryKey>
     {
-        public string text { get; set; }
+        public string line1 { get; set; }
+        public string line2 { get; set; }
         public Player player { get; set; }
 
         public override bool Equals(object other)
@@ -21,7 +22,7 @@ namespace RoguePoleDisplay.Repositories
         {
             string name = "";
             if (null != player) name = player.Name;
-            return (name + text).GetHashCode();
+            return (name + line1 + line2).GetHashCode();
         }
 
         public bool Equals(MemoryKey other)
@@ -32,7 +33,7 @@ namespace RoguePoleDisplay.Repositories
             string otherName = "";
             if (null != other.player) otherName = other.player.Name;
 
-            return name == otherName && text == other.text;
+            return name == otherName && line1 == other.line1 && line2 == other.line2;
         }
     }
 }

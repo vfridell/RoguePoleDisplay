@@ -9,9 +9,10 @@ namespace RoguePoleDisplay.Renderers
     public interface IScreenRenderer
     {
         void Init();
-        void Write(string text);
-        void SlowType(string text, int msTypingDelay);
+        void Write(string line1, string line2);
+        void SlowType(string line1, string line2, int msTypingDelay);
         void Clear();
-        void DisplayMenu(Menu menu);
+        void DisplayMenu(Menu menu, string topLine = "");
+        void WritePosition(char c, int x, int y);
     }
 }

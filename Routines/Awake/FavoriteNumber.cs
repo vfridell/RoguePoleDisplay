@@ -16,7 +16,7 @@ namespace RoguePoleDisplay.Routines
         {
             var memory = Memory.GetInstance();
             var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            Interaction i = face.RememberSingleValue("What's your favorite number?");
+            Interaction i = face.RememberSingleValue("What's your", "favorite number?");
             if(!memory.PlayerLoggedIn())
             {
                 face.Talk("Interesting.");
@@ -26,16 +26,22 @@ namespace RoguePoleDisplay.Routines
             }
             else
             {
-                Interaction favNum = memory.Remember("What's your favorite number?", memory.CurrentPlayer);
-                if(favNum.resultValue == i.resultValue)
+                Interaction favNum = memory.Remember("What's your", "favorite number?", memory.CurrentPlayer);
+                if(null == favNum)
+                {
+                    face.Talk("Well, you don't", "have to tell");
+                    face.Talk("I was just curious...");
+                    face.Talk("Jeesh!");
+                }
+                else if (favNum.resultValue == i.resultValue)
                 {
                     string counterKey = "FavNumberRuns";
-                    Interaction count = memory.Remember(counterKey, memory.CurrentPlayer);
+                    Interaction count = memory.Remember(counterKey, "", memory.CurrentPlayer);
                     if (null == count)
                     {
                         memory.AddToMemory(new Interaction() { displayText = counterKey, resultValue = 1 });
                         face.Talk("Interesting.");
-                        face.Talk(string.Format("I'll remember that {0}.", memory.CurrentPlayer.Name));
+                        face.Talk("I'll remember that", memory.CurrentPlayer.Name);
                         return MakeRoutineResult(favNum);
                     }
                     else
@@ -43,7 +49,7 @@ namespace RoguePoleDisplay.Routines
                         switch(count.resultValue)
                         {
                             case 1:
-                                face.Talk("That's what I thought.");
+                                face.Talk("That's what", "I thought.");
                                 break;
                             case 2:
                                 face.Talk("Yup.");
@@ -91,12 +97,12 @@ namespace RoguePoleDisplay.Routines
                     else if (changedIt.playerAnswer == Interaction.Answer.No)
                     {
                         face.Talk("Interesting...");
-                        face.Talk("", "(Liar)", 2000);
+                        face.Talk("", "(Liar)", 1000);
                     }
                     else
                     {
                         face.Talk("Whatever");
-                        face.Talk("I can ignore", "you too.");
+                        face.Talk("I can ignore", "you too.", 10000);
                     }
                     return MakeRoutineResult(changedIt);
                 }

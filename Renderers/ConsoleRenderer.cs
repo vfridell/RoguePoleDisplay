@@ -12,14 +12,21 @@ namespace RoguePoleDisplay.Renderers
         {
         }
 
-        public void Write(string text)
+        public void Write(string line1, string line2)
         {
-            Console.WriteLine(text);
+            Console.WriteLine(line1);
+            Console.WriteLine(line2);
         }
 
-        public void SlowType(string text, int msTypingDelay = 200)
+        public void SlowType(string line1, string line2, int msTypingDelay = 200)
         {
-            foreach (char c in text)
+            foreach (char c in line1)
+            {
+                Console.Write(c);
+                System.Threading.Thread.Sleep(msTypingDelay);
+            }
+            Console.WriteLine();
+            foreach (char c in line2)
             {
                 Console.Write(c);
                 System.Threading.Thread.Sleep(msTypingDelay);
@@ -32,11 +39,15 @@ namespace RoguePoleDisplay.Renderers
             Console.Clear();
         }
 
-        public void DisplayMenu(Menu menu)
+        public void DisplayMenu(Menu menu, string topLine = "")
         {
             List<MenuItem> items = menu.GetMenuItems();
             items.ForEach((i) => Console.WriteLine(i.choiceNumberAndText));
-            Console.Write("Enter Choice: ");
+        }
+
+        public void WritePosition(char c, int x, int y)
+        {
+            throw new NotImplementedException();
         }
     }
 }

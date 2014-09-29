@@ -26,7 +26,7 @@ namespace RoguePoleDisplay.Routines
 
         private bool CheckForAnything(Face face, string line1, string line2, out Interaction i)
         {
-            i = face.RememberSingleValue(line1, line2, false, 10000);
+            i = face.RememberSingleValue(line1, line2, false, 1000);
             if (i.playerAnswer != Interaction.Answer.DidNotAnswer)
                 return true;
             else 

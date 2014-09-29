@@ -15,16 +15,25 @@ namespace RoguePoleDisplay.Renderers
             _poleDisplay.Initialize();
         }
 
-        public void Write(string text)
+        public void Write(string line1, string line2)
         {
-            //_line1 = line1.PadRight(20).Substring(0, 20);
-            //_line2 = line2.PadRight(20).Substring(0, 20);
-            _poleDisplay.Write(text);
+            line1 = line1.PadRight(20).Substring(0, 20);
+            _poleDisplay.Write(line1);
+            if (!string.IsNullOrEmpty(line2))
+            {
+                line2 = line2.PadRight(20).Substring(0, 20);
+                _poleDisplay.Write(line2);
+            }
         }
 
-        public void SlowType(string text, int msTypingDelay = 200)
+        public void SlowType(string line1, string line2, int msTypingDelay = 200)
         {
-            foreach (char c in text)
+            foreach (char c in line1)
+            {
+                _poleDisplay.Write(c);
+                System.Threading.Thread.Sleep(msTypingDelay);
+            }
+            foreach (char c in line2)
             {
                 _poleDisplay.Write(c);
                 System.Threading.Thread.Sleep(msTypingDelay);
@@ -36,9 +45,14 @@ namespace RoguePoleDisplay.Renderers
             _poleDisplay.Clear();
         }
 
-        public void DisplayMenu(Menu menu)
+        public void DisplayMenu(Menu menu, string topLine = "")
         {
-            throw new NotImplementedException();
+            _poleDisplay.WriteMenu(menu, topLine);
+        }
+
+        public void WritePosition(char c, int x, int y)
+        {
+            _poleDisplay.WritePos(c, x, y);
         }
     }
 }

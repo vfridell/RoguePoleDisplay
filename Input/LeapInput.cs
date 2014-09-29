@@ -8,13 +8,12 @@ using RoguePoleDisplay.Routines;
 using Leap;
 using RoguePoleDisplay.Renderers;
 using System.Threading;
+using System.Diagnostics;
 
 namespace RoguePoleDisplay.Input
 {
     public class LeapInput : IGetInput
     {
-        private TaskCompletionSource<int> _taskSource = new TaskCompletionSource<int>();
-        private Controller _leapController;
 
         public void Init()
         {
@@ -27,34 +26,58 @@ namespace RoguePoleDisplay.Input
 
         public bool TryGetInteger(out int value, int millisecondTimeout)
         {
-            throw new NotImplementedException();
+            TaskCompletionSource<int> taskSource = new TaskCompletionSource<int>();
+            Task<int> t = taskSource.Task;
+            Task.Factory.StartNew(() => {
+                int fingers = GetFingers(5, 10, millisecondTimeout,
+                 (choice, renderer) =>
+                 {
+                     renderer.WritePosition(choice.ToString()[0], 19, 1);
+                 });
+                taskSource.SetResult(fingers);
+            });
+            value = t.Result;
+            return t.Result > 0;
         }
 
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
-            new Thread(() =>
-                {
-                    int fingers = GetFingers(5, menu.NumberOfChoices, 
-                        (choice, renderer) =>
-                        {
-                            menu.Highlight(choice);
-                            renderer.DisplayMenu(menu);
-                        });
-                    _taskSource.SetResult(fingers);
-                }).Start();
-            Task.Delay(millisecondTimeout).ContinueWith((t) => { if (_taskSource.Task.Status == TaskStatus.Running) _taskSource.SetCanceled(); });
-            return menu.GetMenuItem(_taskSource.Task.Result);
+            TaskCompletionSource<int> taskSource = new TaskCompletionSource<int>();
+            Task<int> t = taskSource.Task;
+            Task.Factory.StartNew(() =>
+            {
+                int fingers = GetFingers(5, 10, millisecondTimeout,
+                 (choice, renderer) =>
+                 {
+                     menu.Highlight(choice);
+                     renderer.DisplayMenu(menu);
+                 });
+                taskSource.SetResult(fingers);
+            });
+            int value = t.Result;
+            if (!menu.ValidChoice(value))
+                return null;
+            else
+                return menu.GetMenuItem(value);
         }
 
-        private int GetFingers(int secondsToHold, int numberOfChoices, Action<int, IScreenRenderer> onRefresh)
+        private int GetFingers(int secondsToHold, int numberOfChoices, int millisecondTimeout, Action<int, IScreenRenderer> onRefresh)
         {
-            IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
+            //IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             using (Controller leapController = new Controller())
             {
                 int numFingers = 0;
                 DateTime choiceTime = ResetTimer(secondsToHold);
-                while (DateTime.Now < choiceTime)
+                while (DateTime.Now < choiceTime )
                 {
+                    if (sw.ElapsedMilliseconds >= millisecondTimeout)
+                    {
+                        sw.Stop();
+                        return -1;
+                    }
+
                     int oldNumFingers = numFingers;
 
                     // Get the most recent frame and report some basic information
@@ -75,7 +98,7 @@ namespace RoguePoleDisplay.Input
 
                     if (oldNumFingers != numFingers)
                     {
-                        onRefresh(numFingers, renderer);
+                        //onRefresh(numFingers, renderer);
                         choiceTime = ResetTimer(secondsToHold);
                     }
 
@@ -84,6 +107,7 @@ namespace RoguePoleDisplay.Input
                     //    //                gameState.currentState = new Chosen(_menu.GetMenuItem(_numFingers));
                     //}
                 }
+
                 return numFingers;
             }
         }
@@ -92,7 +116,5 @@ namespace RoguePoleDisplay.Input
         {
             return DateTime.Now.AddSeconds(secondsFromNow);
         }
-
-
     }
 }

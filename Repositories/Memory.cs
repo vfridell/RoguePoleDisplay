@@ -20,15 +20,15 @@ namespace RoguePoleDisplay.Repositories
 
         public static Dictionary<string, Player> Players = new Dictionary<string, Player>()
         {
-            {"Digit", new Player { Name = "Digit", Question = "What's the secret number?", Answer=5 }},
-            {"Foom", new Player { Name = "Foom", Question = "What's the air speed velocity of a laden swallow?", Answer=5 }},
-            {"Sparky", new Player { Name = "Sparky", Question = "How many stairs must a man fall down?", Answer=5 }},
-            {"Mr Pibb", new Player { Name = "Mr Pibb", Question = "What time do we let the dogs out?", Answer=0 }},
-            {"Pillfred", new Player { Name = "Pillfred", Question = "What is your quest?", Answer=0 }},
-            {"Swiper", new Player { Name = "Swiper", Question="How many fingers are you holding up?", Answer=0 }},
-            {"Father Time", new Player { Name = "Father Time", Question="How old are you?", Answer=0 }},
-            {"West Wind", new Player { Name = "West Wind", Question="Which way is the wind blowing?", Answer=0 }},
-            {"Doc Nasty", new Player { Name = "Doc Nasty", Question="How many sick bugs have you healed?", Answer=0 }},
+            {"Digit", new Player { Name = "Digit", QuestionLine1 = "What's the", QuestionLine2 = "secret number?", Answer=5 }},
+            {"Foom", new Player { Name = "Foom", QuestionLine1 = "What's the velocity", QuestionLine2="of a laden swallow?", Answer=5 }},
+            {"Sparky", new Player { Name = "Sparky", QuestionLine1 = "How many stairs must", QuestionLine2="a man fall down?", Answer=5 }},
+            {"Mr Pibb", new Player { Name = "Mr Pibb", QuestionLine1 = "What time do we", QuestionLine2="let the dogs out?", Answer=0 }},
+            {"Pillfred", new Player { Name = "Pillfred", QuestionLine1 = "What is", QuestionLine2="your quest?", Answer=0 }},
+            {"Swiper", new Player { Name = "Swiper", QuestionLine1="How many fingers", QuestionLine2="are you holding up?", Answer=0 }},
+            {"Father Time", new Player { Name = "Father Time", QuestionLine1="How old are you?", QuestionLine2="", Answer=0 }},
+            {"West Wind", new Player { Name = "West Wind", QuestionLine1="How much wind", QuestionLine2="has broken today?", Answer=0 }},
+            {"Doc Nasty", new Player { Name = "Doc Nasty", QuestionLine1="How many sick bugs", QuestionLine2="have you healed?", Answer=0 }},
         };
 
         public static Memory GetInstance()
@@ -72,14 +72,14 @@ namespace RoguePoleDisplay.Repositories
             return _shortTerm.Count(i => i.timestamp >= timestamp) + _longTerm.Count(i => i.timestamp >= timestamp);
         }
 
-        private MemoryKey MakeMemoryKey(Player player, string text)
+        private MemoryKey MakeMemoryKey(Player player, string line1, string line2)
         {
-            return new MemoryKey() { player = player, text = text };
+            return new MemoryKey() { player = player, line1 = line1, line2 = line2 };
         }
 
         private MemoryKey MakeMemoryKey(Interaction i)
         {
-            return new MemoryKey() { player = i.player, text = i.displayText };
+            return new MemoryKey() { player = i.player, line1 = i.displayText };
         }
 
         public void AddToMemory(Interaction interaction, bool longTerm = false)
@@ -101,16 +101,16 @@ namespace RoguePoleDisplay.Repositories
         public bool LastRoutineCompleted { get { return !LastRoutineAbandoned; } }
         public int RoutinesCompletedSinceStateBegan { get { return _routineResults.Count(rr => rr.Timestamp >= CurrentState.StateEntered); } }
 
-        public Interaction Remember(string text, Player player, bool longTerm = false)
+        public Interaction Remember(string line1, string line2, Player player, bool longTerm = false)
         {
             Interaction remembered;
             if (longTerm)
             {
-                remembered = _longTerm.FirstOrDefault(i => i.displayText == text);
+                remembered = _longTerm.FirstOrDefault(i => i.displayText == line1 + line2);
                 if (null != remembered) return remembered;
             }
 
-            MemoryKey key = MakeMemoryKey(player, text);
+            MemoryKey key = MakeMemoryKey(player, line1, line2);
             if (!_textMemory.ContainsKey(key)) return null;
             return _textMemory[key];
         }
@@ -120,17 +120,11 @@ namespace RoguePoleDisplay.Repositories
             return Players.Values.Where(p => p.Answer != 0).ToList();
         }
 
-        public Player GetRandomPlayerWithNoAnswer()
+        public Player GetPlayerWithNoAnswer()
         {
             if (GetKnownPlayers().Count == Players.Count)
                 return null;
-
-            Player player;
-            do
-            {
-                player = Players.Values.FirstOrDefault(p => p.Answer == 0 && _rand.Next(0, 10) > 5);
-            } while (null != player);
-            return player;
+            return Players.Values.FirstOrDefault(p => p.Answer == 0);
         }
     }
 }

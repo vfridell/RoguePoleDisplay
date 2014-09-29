@@ -28,8 +28,7 @@ namespace RoguePoleDisplay
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.SlowType(line1, msTypingDelay);
-            _renderer.SlowType(line2, msTypingDelay);
+            _renderer.SlowType(line1, line2, msTypingDelay);
             result.displayText = (line1 + " " + line2).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
@@ -39,8 +38,7 @@ namespace RoguePoleDisplay
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(line1);
-            _renderer.Write(line2);
+            _renderer.Write(line1, line2);
             result.displayText = (line1 + " " + line2).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
@@ -50,8 +48,7 @@ namespace RoguePoleDisplay
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(line1);
-            _renderer.Write(line2);
+            _renderer.Write(line1, line2);
             result.displayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
@@ -70,8 +67,7 @@ namespace RoguePoleDisplay
         {
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(line1);
-            _renderer.Write(line2);
+            _renderer.Write(line1, line2);
             result.displayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
@@ -87,7 +83,7 @@ namespace RoguePoleDisplay
             Menu menu = new MenuYesNo();
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(line1);
+            _renderer.Write(line1, "");
             _renderer.DisplayMenu(menu);
             result.displayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
@@ -131,7 +127,7 @@ namespace RoguePoleDisplay
             string text = textLines[_incrementer.Next];
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(text);
+            _renderer.Write(text, "");
             result.displayText = text;
             Thread.Sleep(millisecondTimeout);
             return result; ;

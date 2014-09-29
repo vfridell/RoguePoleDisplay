@@ -20,8 +20,11 @@ namespace RoguePoleDisplay
         {
             if (!_initialized)
             {
-                _serialPort = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
+                _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
                 _serialPort.Open();
+                _initialized = true;
+                Clear();
+                SetNoVerticalScroll();
             }
         }
 
@@ -128,8 +131,20 @@ namespace RoguePoleDisplay
             Seed++;
         }
 
-        public void WriteMenu(Menu menu)
+        public void WritePos(char c, int x, int y)
         {
+            int pos = x + (y * 20);
+            if(pos > 39) throw new Exception(string.Format("Bad position given: {0}, {1}", x, y));
+
+            char cpos = (char)pos;
+            Write(ControlCommand.SETPOSITION);
+            Write(cpos.ToString());
+            Write(c.ToString());
+        }
+
+        public void WriteMenu(Menu menu, string topLine)
+        {
+            Write(topLine.PadRight(20).Substring(0, 20));
             Write(menu.GetMenuItem(1).choiceNumberAndText);
             Write('|');
             Write(menu.GetMenuItem(2).choiceNumberAndText);
@@ -167,6 +182,7 @@ namespace RoguePoleDisplay
             {
                 _serialPort.Close();
                 _serialPort.Dispose();
+                _initialized = false;
             }
         }
 

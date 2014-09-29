@@ -15,7 +15,7 @@ namespace RoguePoleDisplay.InputListeners
 
         public LeapInputListener()
         {
-            SecondsBetweenInteractions = 2.0f;
+            SecondsBetweenInteractions = 0.50f;
         }
 
         public LeapInputListener(float secondsBetweenInteractions)

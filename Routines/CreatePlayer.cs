@@ -18,19 +18,19 @@ namespace RoguePoleDisplay.Routines
             Memory memory = Memory.GetInstance();
             var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
 
-            face.Talk("Let's think of a secret");
-            Player player = memory.GetRandomPlayerWithNoAnswer();
-            if (string.IsNullOrEmpty(player.Question))
+            face.Talk("Let's think", "of a secret");
+            Player player = memory.GetPlayerWithNoAnswer();
+            if (null == player)
             {
-                face.Talk("Sorry, I'm full on friends");
+                face.Talk("Sorry,", "I'm full on friends");
                 return MakeRoutineResult(new Interaction() { success = false });
             }
 
-            Interaction newPlayer = face.RememberSingleValue(player.Question, longTerm: true);
+            Interaction newPlayer = face.RememberSingleValue(player.QuestionLine1, player.QuestionLine2, longTerm: true);
             if (newPlayer.playerAnswer == Interaction.Answer.DidNotAnswer)
             {
                 face.SlowTalk("Well");
-                face.Talk("We don't have to be friends");
+                face.Talk("We don't", "have to be friends");
                 face.Talk("I guess...");
             }
             else
@@ -39,6 +39,9 @@ namespace RoguePoleDisplay.Routines
                 memory.CurrentPlayer = player;
                 newPlayer.player = player;
                 face.Talk("Great!");
+                face.Talk("I'll call you", player.Name, 8000);
+                face.Talk("Remember both the", "Q & A for next time", 8000);
+                face.Talk("And I'll", "remember you!", 8000);
             }
             return MakeRoutineResult(newPlayer);
         }
