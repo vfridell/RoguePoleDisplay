@@ -9,7 +9,7 @@ using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
-    [RoutineType(RoutineType.Awake)]
+    //[RoutineType(RoutineType.Awake)]
     class FavoriteNumber : Routine
     {
         protected override RoutineResult RunConsciousRoutine()

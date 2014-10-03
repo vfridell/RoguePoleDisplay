@@ -32,7 +32,8 @@ namespace RoguePoleDisplay.Input
                 int fingers = GetFingers(5, 10, millisecondTimeout,
                  (choice, renderer) =>
                  {
-                     renderer.WritePosition(choice.ToString()[0], 19, 1);
+                     //renderer.WritePosition(choice.ToString()[0], 19, 1);
+                     Console.WriteLine(choice.ToString());
                  });
                 taskSource.SetResult(fingers);
             });
@@ -49,8 +50,9 @@ namespace RoguePoleDisplay.Input
                 int fingers = GetFingers(5, 10, millisecondTimeout,
                  (choice, renderer) =>
                  {
-                     menu.Highlight(choice);
-                     renderer.DisplayMenu(menu);
+                     Console.WriteLine(choice.ToString());
+                     //menu.Highlight(choice);
+                     //renderer.DisplayMenu(menu);
                  });
                 taskSource.SetResult(fingers);
             });
@@ -63,19 +65,19 @@ namespace RoguePoleDisplay.Input
 
         private int GetFingers(int secondsToHold, int numberOfChoices, int millisecondTimeout, Action<int, IScreenRenderer> onRefresh)
         {
-            //IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
+            IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
             Stopwatch sw = new Stopwatch();
             sw.Start();
             using (Controller leapController = new Controller())
             {
-                int numFingers = 0;
+                int numFingers = -1;
                 DateTime choiceTime = ResetTimer(secondsToHold);
                 while (DateTime.Now < choiceTime )
                 {
                     if (sw.ElapsedMilliseconds >= millisecondTimeout)
                     {
                         sw.Stop();
-                        return -1;
+                        return numFingers;
                     }
 
                     int oldNumFingers = numFingers;
@@ -85,27 +87,29 @@ namespace RoguePoleDisplay.Input
 
                     if (!frame.Hands.IsEmpty)
                     {
-                        // Get the first hand
-                        Hand hand = frame.Hands[0];
+                        // Get the hands
+                        Hand hand1 = frame.Hands[0];
+                        Hand hand2 = frame.Hands[1];
 
                         // Check if the hand has any fingers
-                        FingerList fingers = hand.Fingers;
+                        FingerList fingers = hand1.Fingers;
                         if (!fingers.IsEmpty)
                         {
                             numFingers = fingers.Count;
+                        }
+
+                        fingers = hand2.Fingers;
+                        if (!fingers.IsEmpty)
+                        {
+                            numFingers += fingers.Count;
                         }
                     }
 
                     if (oldNumFingers != numFingers)
                     {
-                        //onRefresh(numFingers, renderer);
+                        onRefresh(numFingers, renderer);
                         choiceTime = ResetTimer(secondsToHold);
                     }
-
-                    //if (_numFingers >= 1 && _numFingers <= numberOfChoices && DateTime.Now > _choiceTime)
-                    //{
-                    //    //                gameState.currentState = new Chosen(_menu.GetMenuItem(_numFingers));
-                    //}
                 }
 
                 return numFingers;

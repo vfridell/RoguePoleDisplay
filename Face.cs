@@ -83,8 +83,7 @@ namespace RoguePoleDisplay
             Menu menu = new MenuYesNo();
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.Write(line1, "");
-            _renderer.DisplayMenu(menu);
+            _renderer.DisplayMenu(menu, line1);
             result.displayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
             if(null != item) result.resultValue = item.choiceNumber;
