@@ -12,7 +12,7 @@ namespace RoguePoleDisplay.Renderers
         void Write(string line1, string line2);
         void SlowType(string line1, string line2, int msTypingDelay);
         void Clear();
-        void DisplayMenu(Menu menu, string topLine = "");
+        void DisplayMenu(Menu menu);
         void WritePosition(char c, int x, int y);
     }
 }

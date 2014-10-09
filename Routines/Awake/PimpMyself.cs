@@ -5,19 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay.Routines
 {
-    //[RoutineType(RoutineType.Awake)]
+    [RoutineType(RoutineType.Awake)]
     class PimpMyself : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {
             var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
             face.Talk("Tweet me", "@BellarmineIT");
-            Interaction i = face.RememberSingleValue("I may just reply.", "@BellarmineIT", false, 10000);
-            face.Talk("Poopy grenades", "", 1000);
-            face.Talk("Sorry,", "won't happen again");
+            face.Talk("I may just reply.", "@BellarmineIT", 10000);
+            face.Talk("No guarantees", "", 1000);
+            Interaction i = face.YesNo("Will you tweet me?");
             return MakeRoutineResult(i);
         }
     }

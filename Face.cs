@@ -8,6 +8,7 @@ using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Utilities;
 using RoguePoleDisplay.Repositories;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay
 {
@@ -80,16 +81,35 @@ namespace RoguePoleDisplay
 
         public Interaction YesNo(string line1, bool longTerm = false, int millisecondTimeout = 10000)
         {
-            Menu menu = new MenuYesNo();
+            Menu menu = new MenuYesNo(line1);
             Interaction result = new Interaction();
             _renderer.Clear();
-            _renderer.DisplayMenu(menu, line1);
+            _renderer.DisplayMenu(menu);
             result.displayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
             if(null != item) result.resultValue = item.choiceNumber;
 
             if (result.resultValue != -1)
                 Memory.GetInstance().AddToMemory(result, longTerm);
+
+            return result;
+        }
+
+        public Interaction TwoChoices(string line1, string choice1, string choice2, bool longTerm = false, int millisecondTimeout = 10000)
+        {
+            Menu menu = new MenuTwo(line1, choice1, choice2);
+            Interaction result = new Interaction();
+            _renderer.Clear();
+            _renderer.DisplayMenu(menu);
+            result.displayText = line1;
+            MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
+            if (null != item) result.resultValue = item.choiceNumber;
+
+            if (result.resultValue != -1)
+                Memory.GetInstance().AddToMemory(result, longTerm);
+
+            if (null != item)
+                result.resultText = item.plainText;
 
             return result;
         }

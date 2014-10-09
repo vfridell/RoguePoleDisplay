@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using RoguePoleDisplay.Repositories;
 
-namespace RoguePoleDisplay
+namespace RoguePoleDisplay.Models
 {
     public class Interaction
     {
@@ -23,6 +23,7 @@ namespace RoguePoleDisplay
 
         public DateTime timestamp;
         public int resultValue = -1;
+        public string resultText = "";
         public string displayText = "";
         public bool success = true;
         public Player player { get; set; }

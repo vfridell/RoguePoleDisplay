@@ -45,9 +45,9 @@ namespace RoguePoleDisplay.Renderers
             _poleDisplay.Clear();
         }
 
-        public void DisplayMenu(Menu menu, string topLine = "")
+        public void DisplayMenu(Menu menu)
         {
-            _poleDisplay.WriteMenu(menu, topLine);
+            _poleDisplay.WriteMenu(menu);
         }
 
         public void WritePosition(char c, int x, int y)

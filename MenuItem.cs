@@ -37,5 +37,13 @@ namespace RoguePoleDisplay
                     return string.Format("{0} {1}", choiceNumber, text); 
             }
         }
+
+        public string plainText
+        {
+            get
+            {
+                return _text;
+            }
+        }
     }
 }

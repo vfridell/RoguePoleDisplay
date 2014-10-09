@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay.Routines
 {
-    //[RoutineType(RoutineType.Awake)]
+    [RoutineType(RoutineType.Awake)]
     class ChitChat : Routine
     {
         public class Topic { public string name; public bool positive; }

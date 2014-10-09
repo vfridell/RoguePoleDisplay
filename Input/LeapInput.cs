@@ -51,8 +51,8 @@ namespace RoguePoleDisplay.Input
                  (choice, renderer) =>
                  {
                      Console.WriteLine(choice.ToString());
-                     //menu.Highlight(choice);
-                     //renderer.DisplayMenu(menu);
+                     menu.Highlight(choice);
+                     renderer.DisplayMenu(menu);
                  });
                 taskSource.SetResult(fingers);
             });

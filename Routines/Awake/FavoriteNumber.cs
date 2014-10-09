@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Repositories;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay.Routines
 {
-    //[RoutineType(RoutineType.Awake)]
+    [RoutineType(RoutineType.Awake)]
     class FavoriteNumber : Routine
     {
         protected override RoutineResult RunConsciousRoutine()

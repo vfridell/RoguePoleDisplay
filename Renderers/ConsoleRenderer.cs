@@ -39,7 +39,7 @@ namespace RoguePoleDisplay.Renderers
             Console.Clear();
         }
 
-        public void DisplayMenu(Menu menu, string topLine = "")
+        public void DisplayMenu(Menu menu)
         {
             List<MenuItem> items = menu.GetMenuItems();
             items.ForEach((i) => Console.WriteLine(i.choiceNumberAndText));

@@ -142,12 +142,28 @@ namespace RoguePoleDisplay
             Write(c.ToString());
         }
 
-        public void WriteMenu(Menu menu, string topLine)
+        public void WriteMenu(Menu menu)
         {
-            Write(topLine.PadRight(20).Substring(0, 20));
-            Write(menu.GetMenuItem(1).choiceNumberAndText);
-            Write('|');
-            Write(menu.GetMenuItem(2).choiceNumberAndText);
+            if (menu.NumberOfChoices == 2)
+            {
+                Write(menu.topLine);
+                Write(menu.GetMenuItem(1).choiceNumberAndText);
+                Write('|');
+                Write(menu.GetMenuItem(2).choiceNumberAndText);
+            }
+            else if(menu.NumberOfChoices == 4)
+            {
+                Write(menu.GetMenuItem(1).choiceNumberAndText);
+                Write('|');
+                Write(menu.GetMenuItem(2).choiceNumberAndText);
+                Write(menu.GetMenuItem(3).choiceNumberAndText);
+                Write('|');
+                Write(menu.GetMenuItem(4).choiceNumberAndText);
+            }
+            else
+            {
+                throw new Exception(string.Format("Strange menu type detected."));
+            }
         }
 
         public void Write(string text)
