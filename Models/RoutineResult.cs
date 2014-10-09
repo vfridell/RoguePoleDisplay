@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoguePoleDisplay
+namespace RoguePoleDisplay.Models
 {
     public enum RoutineFinalState { Abandoned, Success, Failure };
 

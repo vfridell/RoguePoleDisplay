@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using RoguePoleDisplay.Routines;
 using RoguePoleDisplay.Repositories;
+using RoguePoleDisplay.Models;
 
 namespace RoguePoleDisplay
 {
