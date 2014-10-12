@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
@@ -14,20 +15,23 @@ namespace RoguePoleDisplay.Routines
     {
         protected override RoutineResult RunConsciousRoutine()
         {
-            var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            face.Talk("Hey...", "hold on");
-            face.Talk("Something", "is not...");
-            face.Talk("I'll be", "right back", 60000);
-            Interaction i = face.YesNo("You still here?");
-            if (i.playerAnswer == Interaction.Answer.Yes)
+            using (var memory = new Memory())
             {
-                face.Talk("Ok.", "Good.");
+                var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
+                face.Talk(memory, "Hey...", "hold on");
+                face.Talk(memory, "Something", "is not...");
+                face.Talk(memory, "I'll be", "right back", 60000);
+                Interaction i = face.YesNo(memory, "You still here?");
+                if (i.playerAnswer == Interaction.Answer.Yes)
+                {
+                    face.Talk(memory, "Ok.", "Good.");
+                }
+                else
+                {
+                    face.Talk(memory, "Guess I'm alone");
+                }
+                return MakeRoutineResult(memory, i);
             }
-            else 
-            {
-                face.Talk("Guess I'm alone");
-            }
-            return MakeRoutineResult(i);
         }
     }
 }

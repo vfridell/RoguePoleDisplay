@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
@@ -14,23 +15,26 @@ namespace RoguePoleDisplay.Routines
     {
         protected override RoutineResult RunConsciousRoutine()
         {
-            var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            face.Talk("* Yawn *", "", 7000);
-            face.Talk("* smack *", " * smack *", 7000);
-            face.Talk("errrrngh", " * stretch *", 3000);
-            face.Talk("...");
-            face.Talk("I need", "coffee");
-            Interaction i = face.YesNo("Got any coffee?");
-            if(i.playerAnswer == Interaction.Answer.Yes)
+            using (var memory = new Memory())
             {
-                face.Talk("If only", "I had a mouth.");
+                var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
+                face.Talk(memory, "* Yawn *", "", 7000);
+                face.Talk(memory, "* smack *", " * smack *", 7000);
+                face.Talk(memory, "errrrngh", " * stretch *", 3000);
+                face.Talk(memory, "...");
+                face.Talk(memory, "I need", "coffee");
+                Interaction i = face.YesNo(memory, "Got any coffee?");
+                if (i.playerAnswer == Interaction.Answer.Yes)
+                {
+                    face.Talk(memory, "If only", "I had a mouth.");
+                }
+                else
+                {
+                    face.Talk(memory, "Doesn't matter", "anyway.");
+                    face.Talk(memory, "I can't drink.", "Not old enough.");
+                }
+                return MakeRoutineResult(memory, i);
             }
-            else
-            {
-                face.Talk("Doesn't matter", "anyway.");
-                face.Talk("I can't drink.", "Not old enough.");
-            }
-            return MakeRoutineResult(i);
         }
     }
 }

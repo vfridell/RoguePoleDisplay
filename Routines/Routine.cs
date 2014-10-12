@@ -27,31 +27,31 @@ namespace RoguePoleDisplay.Routines
             return result;
         }
 
-        protected virtual RoutineResult MakeRoutineResult(RoutineFinalState finalState, Interaction finalInteraction)
+        protected virtual RoutineResult MakeRoutineResult(Memory memory, RoutineFinalState finalState, Interaction finalInteraction)
         {
             RoutineResult result = new RoutineResult()
             {
                 FinalState = finalState,
                 FinalInteraction = finalInteraction,
-                RoutineType = this.GetType()
+                RoutineType = this.GetType().ToString()
             };
-            Memory.GetInstance().AddToMemory(result);
+            memory.AddToMemory(result);
             return result;
         }
 
-        protected virtual RoutineResult MakeRoutineResult(Interaction finalInteraction)
+        protected virtual RoutineResult MakeRoutineResult(Memory memory, Interaction finalInteraction)
         {
             RoutineResult result = new RoutineResult()
             {
                 FinalState = RoutineFinalState.Abandoned,
                 FinalInteraction = finalInteraction,
-                RoutineType = this.GetType()
+                RoutineType = this.GetType().ToString()
             };
             if (finalInteraction.playerAnswer != Interaction.Answer.DidNotAnswer)
             {
                 result.FinalState = finalInteraction.success ? RoutineFinalState.Success : RoutineFinalState.Failure;
             }
-            Memory.GetInstance().AddToMemory(result);
+            memory.AddToMemory(result);
             return result;
         }
     }

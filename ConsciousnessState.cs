@@ -22,9 +22,8 @@ namespace RoguePoleDisplay
 
         protected virtual void ChangeState(ConsciousnessState newState)
         {
-            Memory memory = Memory.GetInstance();
-            memory.CurrentState = newState;
-            memory.LastState = this;
+            Memory.CurrentState = newState;
+            Memory.LastState = this;
             newState.EnterState();
         }
 
@@ -53,7 +52,7 @@ namespace RoguePoleDisplay
                 interactionsNeededToBeginHalf = 1;
             }
 
-            Memory memory = Memory.GetInstance();
+            using (var memory = new Memory())
             if (memory.InteractionsSince(_stateEntered) >= interactionsNeededToBeginHalf)
             {
                 ChangeState(HalfState);
@@ -75,26 +74,28 @@ namespace RoguePoleDisplay
     {
         public override bool CheckForStateChange()
         {
-            Memory memory = Memory.GetInstance();
-            if (!memory.PlayerLoggedIn())
+            using (var memory = new Memory())
             {
-                Random random = new Random();
-                int num = random.Next(1,5);
-                if(num == 4)
+                if (!Memory.PlayerLoggedIn())
                 {
-                    ChangeState(FriendlyState);
+                    Random random = new Random();
+                    int num = random.Next(1, 5);
+                    if (num == 4)
+                    {
+                        ChangeState(FriendlyState);
+                        return true;
+                    }
+                }
+
+                if (memory.LastRoutineAbandoned() ||
+                   (memory.RoutinesCompletedSinceStateBegan() * 0.25) >= new Random().NextDouble())
+                {
+                    ChangeState(HalfState);
                     return true;
                 }
-            }
 
-            if (memory.LastRoutineAbandoned ||
-               (memory.RoutinesCompletedSinceStateBegan * 0.25) >= new Random().NextDouble())
-            {
-                ChangeState(HalfState);
-                return true;
+                return false;
             }
-
-            return false;
         }
 
         public override RoutineType GetNextRoutineType()
@@ -107,8 +108,7 @@ namespace RoguePoleDisplay
     {
         public override bool CheckForStateChange()
         {
-            Memory memory = Memory.GetInstance();
-            if (memory.PlayerLoggedIn())
+            if (Memory.PlayerLoggedIn())
             {
                 ChangeState(AwakeState);
                 return true;
@@ -126,37 +126,39 @@ namespace RoguePoleDisplay
     {
         public override bool CheckForStateChange()
         {
-            Memory memory = Memory.GetInstance();
-            if(memory.LastState is Asleep && 
-                memory.LastRoutineCompleted)
+            using (var memory = new Memory())
             {
-                ChangeState(AwakeState);
-                return true;
-            }
+                if (Memory.LastState is Asleep &&
+                    memory.LastRoutineCompleted())
+                {
+                    ChangeState(AwakeState);
+                    return true;
+                }
 
-            if(memory.LastRoutineAbandoned)
-            {
-                ChangeState(AsleepState);
-                return true;
-            }
+                if (memory.LastRoutineAbandoned())
+                {
+                    ChangeState(AsleepState);
+                    return true;
+                }
 
-            return false;
+                return false;
+            }
         }
 
         public override RoutineType GetNextRoutineType()
         {
-            Memory memory = Memory.GetInstance();
-            if (memory.LastState is Awake) 
+            using (var memory = new Memory())
+            if (Memory.LastState is Awake) 
             {
                 return RoutineType.Dusk;
             }
-            else if(memory.LastState is Asleep)
+            else if(Memory.LastState is Asleep)
             {
                 return RoutineType.Dawn;
             }
             else
             {
-                throw new Exception(string.Format("Last Consciousness State not recognized: {0}", memory.LastState.ToString()));
+                throw new Exception(string.Format("Last Consciousness State not recognized: {0}", Memory.LastState.ToString()));
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
@@ -14,13 +15,16 @@ namespace RoguePoleDisplay.Routines
     {
         protected override RoutineResult RunConsciousRoutine()
         {
-            var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            face.Talk("Uh.", "Where...", 8000);
-            Interaction i = face.RememberSingleValue("Where", "am I?");
-            face.Talk("weird");
-            face.Talk("I had the", "strangest", 6000);
-            face.Talk("strangest", "dream");
-            return MakeRoutineResult(i);
+            using (var memory = new Memory())
+            {
+                var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
+                face.Talk(memory, "Uh.", "Where...", 8000);
+                Interaction i = face.RememberSingleValue(memory, "Where", "am I?");
+                face.Talk(memory, "weird");
+                face.Talk(memory, "I had the", "strangest", 6000);
+                face.Talk(memory, "strangest", "dream");
+                return MakeRoutineResult(memory, i);
+            }
         }
     }
 }

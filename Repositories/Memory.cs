@@ -5,14 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using RoguePoleDisplay.Routines;
 using RoguePoleDisplay.Models;
+using System.Data.Entity;
 
 namespace RoguePoleDisplay.Repositories
 {
-    public class Memory
+    public class MemoryContext : DbContext
     {
-        private Random _rand = new Random();
-        private static Memory _instance;
-        protected Memory() 
+        public MemoryContext()
+            : base("DefaultConnection")
+        { }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Interaction> Interactions { get; set; }
+        public DbSet<RoutineResult> RoutineResults { get; set; }
+    }
+
+    public class Memory : IDisposable
+    {
+        private static Random _rand = new Random();
+        private MemoryContext _session;
+        static Memory() 
         {
             CurrentState = ConsciousnessState.AwakeState;
             LastState = ConsciousnessState.AwakeState;
@@ -31,53 +42,88 @@ namespace RoguePoleDisplay.Repositories
             {"Doc Nasty", new Player { Name = "Doc Nasty", QuestionLine1="How many sick bugs", QuestionLine2="have you healed?", Answer=0 }},
         };
 
-        public static Memory GetInstance()
-        {
-            if (null == _instance)
-            {
-                _instance = new Memory();
-            }
-            return _instance;
-        }
-
-        public ConsciousnessState CurrentState;
-        public ConsciousnessState LastState;
-
-        public Player CurrentPlayer { get; set; }
-        public bool PlayerLoggedIn()
-        {
-            return null != CurrentPlayer;
-        }
-
-        private List<Interaction> _shortTerm = new List<Interaction>();
-        private List<Interaction> _longTerm = new List<Interaction>();
-        private Dictionary<MemoryKey, Interaction> _textMemory = new Dictionary<MemoryKey, Interaction>();
-        public Interaction LastInteraction
+        public MemoryContext DBContext
         {
             get
             {
-                if (_shortTerm.Count > 1)
-                    return _shortTerm[_shortTerm.Count - 1];
-                else if (_longTerm.Count > 1)
-                    return _longTerm[_longTerm.Count - 1];
-                else
-                    return new Interaction();
+                if (null == _session)
+                {
+                    _session = new MemoryContext();
+                    if (_session.Players.Count() == 0)
+                    {
+                        foreach (var pair in Memory.Players)
+                        {
+                            _session.Players.Add(pair.Value);
+                        }
+                        _session.SaveChanges();
+                    }
+                }
+                return _session;
             }
         }
 
-        private List<RoutineResult> _routineResults = new List<RoutineResult>();
+        public static ConsciousnessState CurrentState;
+        public static ConsciousnessState LastState;
+
+        private static long _playerID = -1;
+        public static bool PlayerLoggedIn()
+        {
+            return _playerID >= 0;
+        }
+
+        private static List<Interaction> _shortTerm = new List<Interaction>();
+        private static Dictionary<MemoryKey, Interaction> _textMemory = new Dictionary<MemoryKey, Interaction>();
+
+
+        public Player GetCurrentPlayer()
+        {
+            if (!PlayerLoggedIn()) return null;
+            return DBContext.Players.Where(p => p.id == _playerID).Single();
+        }
+
+        public void SetCurrentPlayer(Player player)
+        {
+            _playerID = player.id;
+        }
+
+        public Interaction LastInteraction()
+        {
+            if (_shortTerm.Count > 1)
+                return _shortTerm[_shortTerm.Count - 1];
+            else 
+            {
+                var query = from i in DBContext.Interactions
+                            orderby i.timestamp descending
+                            select i;
+                if (query.Count() > 0)
+                {
+                    return query.First();
+                }
+                else
+                {
+                    return new Interaction();
+                }
+            }
+        }
 
         public int InteractionsSince(DateTime timestamp)
         {
-            return _shortTerm.Count(i => i.timestamp >= timestamp) + _longTerm.Count(i => i.timestamp >= timestamp);
+            int shortTermTotal = _shortTerm.Count(i => i.timestamp >= timestamp);
+            int longTermTotal = 0;
+            var query = from i in DBContext.Interactions
+                        where i.timestamp >= timestamp
+                        select i;
+            longTermTotal = query.Count();
+
+            return shortTermTotal + longTermTotal;
         }
 
-        private MemoryKey MakeMemoryKey(Player player, string line1, string line2)
+        private static MemoryKey MakeMemoryKey(Player player, string line1, string line2)
         {
             return new MemoryKey() { player = player, line1 = line1, line2 = line2 };
         }
 
-        private MemoryKey MakeMemoryKey(Interaction i)
+        private static MemoryKey MakeMemoryKey(Interaction i)
         {
             return new MemoryKey() { player = i.player, line1 = i.displayText };
         }
@@ -86,7 +132,10 @@ namespace RoguePoleDisplay.Repositories
         {
             interaction.timestamp = DateTime.Now;
             _shortTerm.Add(interaction);
-            if (longTerm) _longTerm.Add(interaction);
+            if (longTerm)
+            {
+                DBContext.Interactions.Add(interaction);
+            }
 
             _textMemory[MakeMemoryKey(interaction)] = interaction;
         }
@@ -94,37 +143,76 @@ namespace RoguePoleDisplay.Repositories
         internal void AddToMemory(RoutineResult routineResult)
         {
             routineResult.Timestamp = DateTime.Now;
-            _routineResults.Add(routineResult);
+            DBContext.RoutineResults.Add(routineResult);
         }
 
-        public bool LastRoutineAbandoned { get { return _routineResults.Last().FinalState == RoutineFinalState.Abandoned; } }
-        public bool LastRoutineCompleted { get { return !LastRoutineAbandoned; } }
-        public int RoutinesCompletedSinceStateBegan { get { return _routineResults.Count(rr => rr.Timestamp >= CurrentState.StateEntered); } }
+        public bool LastRoutineAbandoned() 
+        {
+            var query = from r in DBContext.RoutineResults
+                        orderby r.Timestamp descending
+                        select r;
+            return query.First().FinalState == RoutineFinalState.Abandoned;
+        }
 
-        public Interaction Remember(string line1, string line2, Player player, bool longTerm = false)
+        public bool LastRoutineCompleted()
+        { 
+            return !LastRoutineAbandoned(); 
+        }
+
+        public int RoutinesCompletedSinceStateBegan()
+        {
+            var query = from r in DBContext.RoutineResults
+                        where r.Timestamp >= CurrentState.StateEntered && r.FinalState != RoutineFinalState.Abandoned
+                        orderby r.Timestamp descending
+                        select r;
+            return query.Count();
+        }
+
+        public Interaction Remember(string line1, string line2, bool longTerm = false)
         {
             Interaction remembered;
             if (longTerm)
             {
-                remembered = _longTerm.FirstOrDefault(i => i.displayText == line1 + line2);
+                var query = from i in DBContext.Interactions
+                            where i.displayText == line1 + line2 && i.player.Equals(GetCurrentPlayer())
+                            orderby i.timestamp descending
+                            select i;
+                remembered = query.First();
                 if (null != remembered) return remembered;
             }
 
-            MemoryKey key = MakeMemoryKey(player, line1, line2);
+            MemoryKey key = MakeMemoryKey(GetCurrentPlayer(), line1, line2);
             if (!_textMemory.ContainsKey(key)) return null;
             return _textMemory[key];
         }
 
         public List<Player> GetKnownPlayers()
         {
-            return Players.Values.Where(p => p.Answer != 0).ToList();
+            var query = from p in DBContext.Players
+                        where p.Answer != null && p.Answer != 0
+                        select p;
+            return query.ToList();
         }
 
         public Player GetPlayerWithNoAnswer()
         {
-            if (GetKnownPlayers().Count == Players.Count)
-                return null;
-            return Players.Values.FirstOrDefault(p => p.Answer == 0);
+            var query = from p in DBContext.Players
+                        where p.Answer == null || p.Answer == 0
+                        select p;
+            if (query.Count() == 0) return null;
+            return query.First();
         }
+
+        public bool cancelChanges = false;
+        public void Dispose()
+        {
+            if (_session != null && !cancelChanges)
+            {
+                _session.SaveChanges();
+                _session.Dispose();
+                _session = null;
+            }
+        }
+        
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
@@ -14,24 +15,27 @@ namespace RoguePoleDisplay.Routines
     {
         protected override RoutineResult RunConsciousRoutine()
         {
-            var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            face.Talk("Man, I'm", "sleepy");
-            Interaction i = face.YesNo("Are you sleepy?");
-            if (i.playerAnswer == Interaction.Answer.Yes)
+            using (var memory = new Memory())
             {
-                face.Talk("Let's rest.");
+                var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
+                face.Talk(memory, "Man, I'm", "sleepy");
+                Interaction i = face.YesNo(memory, "Are you sleepy?");
+                if (i.playerAnswer == Interaction.Answer.Yes)
+                {
+                    face.Talk(memory, "Let's rest.");
+                }
+                else if (i.playerAnswer == Interaction.Answer.No)
+                {
+                    face.Talk(memory, "No? Well,", "I'll try");
+                    face.Talk(memory, "To stay", "awake.");
+                    face.Talk(memory, "* Yawn *");
+                }
+                else
+                {
+                    face.Talk(memory, "Guess nobody cares");
+                }
+                return MakeRoutineResult(memory, i);
             }
-            else if(i.playerAnswer == Interaction.Answer.No)
-            {
-                face.Talk("No? Well,", "I'll try");
-                face.Talk("To stay", "awake.");
-                face.Talk("* Yawn *");
-            }
-            else
-            {
-                face.Talk("Guess nobody cares");
-            }
-            return MakeRoutineResult(i);
         }
     }
 }

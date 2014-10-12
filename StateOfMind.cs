@@ -20,15 +20,15 @@ namespace RoguePoleDisplay
 
         public void BecomeSelfAware()
         {
-            Memory memory = Memory.GetInstance();
+            using (var memory = new Memory())
 
             do
             {
-                RoutineType routineType = memory.CurrentState.GetNextRoutineType();
+                RoutineType routineType = Memory.CurrentState.GetNextRoutineType();
                 Routine currentRoutine = RoutineFactory.GetRoutine(routineType);
                 RoutineResult result = currentRoutine.Run();
                 if (routineType == RoutineType.Login 
-                    && !memory.PlayerLoggedIn()
+                    && !Memory.PlayerLoggedIn()
                     && result.FinalState != RoutineFinalState.Abandoned)
                 {
                     currentRoutine = RoutineFactory.GetCreateLoginRoutine();
@@ -37,9 +37,9 @@ namespace RoguePoleDisplay
 
                 Console.WriteLine("routine result was " + result.FinalState.ToString());
 
-                if(memory.CurrentState.CheckForStateChange())
+                if(Memory.CurrentState.CheckForStateChange())
                 {
-                    Console.WriteLine("state changed to {0}", memory.CurrentState.GetType().Name);
+                    Console.WriteLine("state changed to {0}", Memory.CurrentState.GetType().Name);
                 }
             } while (true);
         }

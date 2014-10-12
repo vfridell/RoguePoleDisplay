@@ -11,7 +11,8 @@ namespace RoguePoleDisplay.Models
 
     public class RoutineResult
     {
-        public Type RoutineType { get; set; }
+        public long id { get; private set; }
+        public string RoutineType { get; set; }
         public DateTime Timestamp { get; set; }
         public RoutineFinalState FinalState { get; set; }
         public Interaction FinalInteraction { get; set; }

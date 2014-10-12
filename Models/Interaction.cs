@@ -12,7 +12,6 @@ namespace RoguePoleDisplay.Models
         public Interaction()
         {
             timestamp = DateTime.Now;
-            player = Memory.GetInstance().CurrentPlayer;
         }
 
         public Interaction(int resultVal)
@@ -21,11 +20,25 @@ namespace RoguePoleDisplay.Models
             resultValue = resultVal;
         }
 
-        public DateTime timestamp;
-        public int resultValue = -1;
-        public string resultText = "";
-        public string displayText = "";
-        public bool success = true;
+        public long id { get; private set; }
+        public DateTime timestamp { get; set; }
+        
+        private int _resultValue = -1;
+        public int resultValue
+        {
+            get { return _resultValue; }
+            set { _resultValue = value; }
+        }
+
+        public string resultText { get; set; }
+        public string displayText { get; set; }
+
+        private bool _success = true;
+        public bool success
+        {
+            get { return _success; }
+            set { _success = value; }
+        }
         public Player player { get; set; }
 
         public enum Answer { Yes = 1, No = 2, Maybe = 3, DidNotAnswer=-1 };

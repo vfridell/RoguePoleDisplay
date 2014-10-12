@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Input;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
@@ -14,19 +15,22 @@ namespace RoguePoleDisplay.Routines
     {
         protected override RoutineResult RunConsciousRoutine()
         {
-            var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
-            Interaction i = face.TwoChoices("Cake or Pie?", "Cake", "Pie");
-            face.Talk("AHHHHH!", "A zombie!");
-            if (string.IsNullOrEmpty(i.resultText))
+            using (var memory = new Memory())
             {
-                face.Talk("You were eaten");
+                var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
+                Interaction i = face.TwoChoices(memory, "Cake or Pie?", "Cake", "Pie");
+                face.Talk(memory, "AHHHHH!", "A zombie!");
+                if (string.IsNullOrEmpty(i.resultText))
+                {
+                    face.Talk(memory, "You were eaten");
+                }
+                else
+                {
+                    face.Talk(memory, "Let's get the", "grenades");
+                    face.Talk(memory, string.Format("{0} grenades", i.resultText));
+                }
+                return MakeRoutineResult(memory, i);
             }
-            else
-            {
-                face.Talk("Let's get the", "grenades");
-                face.Talk(string.Format("{0} grenades", i.resultText));
-            }
-            return MakeRoutineResult(i);
         }
     }
 }
