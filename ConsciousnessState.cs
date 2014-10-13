@@ -86,7 +86,7 @@ namespace RoguePoleDisplay
                 {
                     Random random = new Random();
                     int num = random.Next(1, 5);
-                    if (num > 0)
+                    if (num >= 3)
                     {
                         StateChangeReason = string.Format("Player not logged in.  Random chance."); 
                         ChangeState(FriendlyState);
