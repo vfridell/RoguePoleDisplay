@@ -10,7 +10,7 @@ using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
-    [RoutineType(RoutineType.Awake)]
+    //[RoutineType(RoutineType.Awake)]
     class ChitChat : Routine
     {
         public class Topic { public string name; public bool positive; }

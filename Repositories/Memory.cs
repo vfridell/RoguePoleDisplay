@@ -25,7 +25,7 @@ namespace RoguePoleDisplay.Repositories
         private MemoryContext _session;
         static Memory() 
         {
-            CurrentState = ConsciousnessState.HalfState;
+            CurrentState = ConsciousnessState.AwakeState;
             LastState = ConsciousnessState.AwakeState;
         }
 
@@ -74,6 +74,10 @@ namespace RoguePoleDisplay.Repositories
         private static List<Interaction> _shortTerm = new List<Interaction>();
         private static Dictionary<MemoryKey, Interaction> _textMemory = new Dictionary<MemoryKey, Interaction>();
 
+        public void SaveChanges()
+        {
+            _session.SaveChanges();
+        }
 
         public Player GetCurrentPlayer()
         {
@@ -174,11 +178,20 @@ namespace RoguePoleDisplay.Repositories
             Interaction remembered;
             if (longTerm)
             {
+                string text = (line1 + " " + line2).Trim();
                 var query = from i in DBContext.Interactions
-                            where i.displayText == line1 + line2 && i.player.Equals(GetCurrentPlayer())
+                            where i.displayText == text 
                             orderby i.timestamp descending
                             select i;
-                remembered = query.First();
+                List<Interaction> interactions = query.ToList();
+                if (null == GetCurrentPlayer())
+                {
+                    remembered = interactions.Where(i => i.player == null).FirstOrDefault();
+                }
+                else
+                {
+                    remembered = interactions.Where(i => i.player != null).Where(i => i.player.Equals(GetCurrentPlayer())).FirstOrDefault();
+                }
                 if (null != remembered) return remembered;
             }
 
