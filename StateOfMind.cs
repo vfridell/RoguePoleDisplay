@@ -40,6 +40,7 @@ namespace RoguePoleDisplay
                 if(Memory.CurrentState.CheckForStateChange())
                 {
                     Console.WriteLine("state changed to {0}", Memory.CurrentState.GetType().Name);
+                    Console.WriteLine("Reason: {0}", ConsciousnessState.StateChangeReason);
                 }
             } while (true);
         }

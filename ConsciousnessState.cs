@@ -17,8 +17,10 @@ namespace RoguePoleDisplay
         public abstract bool CheckForStateChange();
         public abstract RoutineType GetNextRoutineType();
 
-        protected DateTime _stateEntered;
+        protected DateTime _stateEntered = DateTime.Now;
         public DateTime StateEntered { get { return _stateEntered; } }
+
+        public static string StateChangeReason { get; protected set; }
 
         protected virtual void ChangeState(ConsciousnessState newState)
         {
@@ -53,8 +55,12 @@ namespace RoguePoleDisplay
             }
 
             using (var memory = new Memory())
-            if (memory.InteractionsSince(_stateEntered) >= interactionsNeededToBeginHalf)
+            if (memory.PlayerInteractionsSince(_stateEntered) >= interactionsNeededToBeginHalf)
             {
+                StateChangeReason = string.Format("Number of interactions ({0}) since {1} meets the threshold value of {2}", 
+                                                   memory.PlayerInteractionsSince(_stateEntered),
+                                                   _stateEntered.ToShortTimeString(),
+                                                   interactionsNeededToBeginHalf);
                 ChangeState(HalfState);
                 return true;
             }
@@ -82,14 +88,20 @@ namespace RoguePoleDisplay
                     int num = random.Next(1, 5);
                     if (num == 4)
                     {
+                        StateChangeReason = string.Format("Player not logged in.  Random chance."); 
                         ChangeState(FriendlyState);
                         return true;
                     }
                 }
 
+                double threshold = new Random().NextDouble() * 10;
                 if (memory.LastRoutineAbandoned() ||
-                   (memory.RoutinesCompletedSinceStateBegan() * 0.25) >= new Random().NextDouble())
+                   memory.RoutinesCompletedSinceStateBegan() > threshold )
                 {
+                    StateChangeReason = string.Format("Routine abandoned ({0}) or routines completed ({1}) greater than threshold value {2}", 
+                                   memory.LastRoutineAbandoned(),
+                                   memory.RoutinesCompletedSinceStateBegan(),
+                                   threshold);
                     ChangeState(HalfState);
                     return true;
                 }
@@ -110,6 +122,7 @@ namespace RoguePoleDisplay
         {
             if (Memory.PlayerLoggedIn())
             {
+                StateChangeReason = "Player logged in";
                 ChangeState(AwakeState);
                 return true;
             }
@@ -131,12 +144,14 @@ namespace RoguePoleDisplay
                 if (Memory.LastState is Asleep &&
                     memory.LastRoutineCompleted())
                 {
+                    StateChangeReason = string.Format("Was asleep and last routine was completed"); 
                     ChangeState(AwakeState);
                     return true;
                 }
 
                 if (memory.LastRoutineAbandoned())
                 {
+                    StateChangeReason = string.Format("Last routine was abandoned"); 
                     ChangeState(AsleepState);
                     return true;
                 }

@@ -54,5 +54,17 @@ namespace RoguePoleDisplay.Renderers
         {
             _poleDisplay.WritePos(c, x, y);
         }
+
+        #region IScreenRenderer Members
+
+
+        public void WriteProgressIndicator(int total, int start, int current)
+        {
+            char[] indicators = {'|', '/', '-', '\\', '|', '+'};
+            int index = Convert.ToInt32((Convert.ToDouble(current) / Convert.ToDouble(total)) * Convert.ToDouble(total));
+            _poleDisplay.WritePos(indicators[index], 19, 0);
+        }
+
+        #endregion
     }
 }

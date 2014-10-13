@@ -25,7 +25,7 @@ namespace RoguePoleDisplay.Repositories
         private MemoryContext _session;
         static Memory() 
         {
-            CurrentState = ConsciousnessState.AwakeState;
+            CurrentState = ConsciousnessState.HalfState;
             LastState = ConsciousnessState.AwakeState;
         }
 
@@ -106,15 +106,16 @@ namespace RoguePoleDisplay.Repositories
             }
         }
 
-        public int InteractionsSince(DateTime timestamp)
+        public int PlayerInteractionsSince(DateTime timestamp)
         {
             int shortTermTotal = _shortTerm.Count(i => i.timestamp >= timestamp);
             int longTermTotal = 0;
             var query = from i in DBContext.Interactions
                         where i.timestamp >= timestamp
                         select i;
-            longTermTotal = query.Count();
-
+            // have to do this craziness because linq to entity doesn't like enums or something
+            List<Interaction> interactions = query.ToList();
+            longTermTotal = interactions.Where(i => i.playerAnswer != Interaction.Answer.DidNotAnswer).Count();
             return shortTermTotal + longTermTotal;
         }
 

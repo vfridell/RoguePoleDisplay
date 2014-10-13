@@ -49,5 +49,15 @@ namespace RoguePoleDisplay.Renderers
         {
             throw new NotImplementedException();
         }
+
+        #region IScreenRenderer Members
+
+
+        public void WriteProgressIndicator(int total, int start, int current)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

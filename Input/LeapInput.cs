@@ -32,7 +32,7 @@ namespace RoguePoleDisplay.Input
                 int fingers = GetFingers(5, 10, millisecondTimeout,
                  (choice, renderer) =>
                  {
-                     //renderer.WritePosition(choice.ToString()[0], 19, 1);
+                     renderer.WritePosition(choice.ToString()[0], 19, 1);
                      Console.WriteLine(choice.ToString());
                  });
                 taskSource.SetResult(fingers);

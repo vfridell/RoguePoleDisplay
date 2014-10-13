@@ -20,7 +20,7 @@ namespace RoguePoleDisplay
         {
             if (!_initialized)
             {
-                _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
+                _serialPort = new SerialPort("COM3", 4800, Parity.None, 8, StopBits.One);
                 _serialPort.Open();
                 _initialized = true;
                 Clear();

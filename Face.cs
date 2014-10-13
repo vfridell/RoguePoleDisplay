@@ -41,7 +41,13 @@ namespace RoguePoleDisplay
             _renderer.Clear();
             _renderer.Write(line1, line2);
             result.displayText = (line1 + " " + line2).Trim();
-            Thread.Sleep(millisecondTimeout);
+
+            int oneFifth = millisecondTimeout / 5;
+            for (int i = 0; i <= 5; i++)
+            {
+                _renderer.WriteProgressIndicator(5, 0, i);
+                Thread.Sleep(oneFifth);
+            }
             return result;
         }
 

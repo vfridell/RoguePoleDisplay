@@ -15,7 +15,7 @@ namespace RoguePoleDisplay.Models
         }
 
         public Interaction(int resultVal)
-            : base()
+            : this()
         {
             resultValue = resultVal;
         }
