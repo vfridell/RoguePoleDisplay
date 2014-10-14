@@ -12,7 +12,7 @@ namespace RoguePoleDisplay.Repositories
     public class MemoryContext : DbContext
     {
         public MemoryContext()
-            : base("DefaultConnection")
+            : base("RoguePoleDisplayDB")
         { }
         public DbSet<Player> Players { get; set; }
         public DbSet<Interaction> Interactions { get; set; }

@@ -29,7 +29,7 @@ namespace RoguePoleDisplay.Routines
                         face.Talk(memory, "Oh.", "", 1000);
                         face.Talk(memory, "Use the word", " 'Aardvark'");
                         face.Talk(memory, "In your tweet", " for bonus points.");
-                        face.Talk(memory, "(I love that word)", "", 500);
+                        face.Talk(memory, "(I love that word)", "", 3000);
                         break;
                     case Interaction.Answer.No:
                         face.Talk(memory, "That's ok.", "I understand.");
