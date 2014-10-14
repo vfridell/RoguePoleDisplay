@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO.Ports;
+using System.Threading;
 
 namespace RoguePoleDisplay
 {
@@ -12,7 +13,6 @@ namespace RoguePoleDisplay
 
         private PoleDisplay() 
         {
-            Seed = 198789752;
         }
 
         private bool _initialized = false;
@@ -74,8 +74,6 @@ namespace RoguePoleDisplay
 
         private SerialPort _serialPort;
 
-        public int Seed { get; set; }
-
         public void Clear()
         {
             Write(ControlCommand.CLEARALL);
@@ -110,7 +108,7 @@ namespace RoguePoleDisplay
             Fade(' ');
         }
 
-        public void Fade(char c)
+        public void Fade(char c, int millisecondsBetweenSteps = 0)
         {
             List<char> cPositions = new List<char>();
             for (int i = 0; i < 40; i++)
@@ -118,7 +116,7 @@ namespace RoguePoleDisplay
                 cPositions.Add((char)i);
             }
 
-            Random rnd = new Random(Seed);
+            Random rnd = new Random();
             for (int i = 39; i >= 0; i--)
             {
                 int pos = rnd.Next(0, i);
@@ -127,8 +125,8 @@ namespace RoguePoleDisplay
                 Write(cpos.ToString());
                 Write(c.ToString());
                 cPositions.Remove(cpos);
+                if (millisecondsBetweenSteps > 0) Thread.Sleep(millisecondsBetweenSteps);
             }
-            Seed++;
         }
 
         public void WritePos(char c, int x, int y)

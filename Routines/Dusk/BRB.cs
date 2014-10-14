@@ -20,7 +20,14 @@ namespace RoguePoleDisplay.Routines
                 var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
                 face.Talk(memory, "Hey...", "hold on");
                 face.Talk(memory, "Something", "is not...");
-                face.Talk(memory, "I'll be", "right back", 60000);
+                face.Talk(memory, "I'll be", "right back", 2000);
+                for (int j = 1; j <= 1000; j *= 10)
+                {
+                    face.Fade(memory, '/', j);
+                    face.Fade(memory, '|', j);
+                    face.Fade(memory, '\\', j);
+                    face.Fade(memory, '|', j);
+                }
                 Interaction i = face.YesNo(memory, "You still here?");
                 if (i.playerAnswer == Interaction.Answer.Yes)
                 {

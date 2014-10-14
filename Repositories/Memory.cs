@@ -25,8 +25,8 @@ namespace RoguePoleDisplay.Repositories
         private MemoryContext _session;
         static Memory() 
         {
-            CurrentState = ConsciousnessState.AwakeState;
-            LastState = ConsciousnessState.AwakeState;
+            CurrentState = ConsciousnessState.HalfState;
+            LastState = ConsciousnessState.AsleepState;
         }
 
         public static Dictionary<string, Player> Players = new Dictionary<string, Player>()

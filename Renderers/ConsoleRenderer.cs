@@ -59,5 +59,15 @@ namespace RoguePoleDisplay.Renderers
         }
 
         #endregion
+
+        #region IScreenRenderer Members
+
+
+        public void Fade(char c, int millisecondsBetweenSteps)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

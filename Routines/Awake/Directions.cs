@@ -75,6 +75,18 @@ namespace RoguePoleDisplay.Routines
                         return MakeRoutineResult(memory, looking);
                     }
 
+                    looking = face.YesNo(memory, "Need the ARC?");
+                    if (looking.playerAnswer == Interaction.Answer.Yes)
+                    {
+                        face.Talk(memory, "Go that way", "<==========         ");
+                    ///////////////////////01234567890123456789////////////////////
+                        face.Talk(memory, "Then head down", "the stairs. VVV");
+                        face.Talk(memory, "It's on the B-level", "");
+                        face.Talk(memory, "Wish I was on B...", "");
+                        face.Talk(memory, "So much cooler", " down there.");
+                        return MakeRoutineResult(memory, looking);
+                    }
+
                     face.Talk(memory, "Sorry, I don't know", "much else.");
                     return MakeRoutineResult(memory, i);
                 }

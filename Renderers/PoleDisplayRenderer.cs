@@ -55,9 +55,6 @@ namespace RoguePoleDisplay.Renderers
             _poleDisplay.WritePos(c, x, y);
         }
 
-        #region IScreenRenderer Members
-
-
         public void WriteProgressIndicator(int total, int start, int current)
         {
             char[] indicators = {'|', '/', '-', '\\', '|', '+'};
@@ -65,6 +62,9 @@ namespace RoguePoleDisplay.Renderers
             _poleDisplay.WritePos(indicators[index], 19, 0);
         }
 
-        #endregion
+        public void Fade(char c, int millisecondsBetweenSteps)
+        {
+            _poleDisplay.Fade(c, millisecondsBetweenSteps);
+        }
     }
 }

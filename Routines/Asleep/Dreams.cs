@@ -20,7 +20,7 @@ namespace RoguePoleDisplay.Routines
                 var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
                 Interaction i;
                 if (CheckForAnything(memory, face, "Fac/Staff", "$5.60", 10000, out i)) return MakeRoutineResult(memory, i);
-                if (CheckForAnything(memory, face, "You saved", "$11.34", 10000, out i)) return MakeRoutineResult(memory, i);
+                if (CheckForAnything(memory, face, "You saved", "$12.34", 10000, out i)) return MakeRoutineResult(memory, i);
                 if (CheckForAnything(memory, face, "Total", "$100.00", 10000, out i)) return MakeRoutineResult(memory, i);
                 if (CheckForAnything(memory, face, "Please wait", "", 10000, out i)) return MakeRoutineResult(memory, i);
                 if (CheckForAnything(memory, face, "Approved", "Thank you!", 10000, out i)) return MakeRoutineResult(memory, i);

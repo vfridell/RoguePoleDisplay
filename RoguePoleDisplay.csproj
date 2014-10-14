@@ -122,9 +122,12 @@
     <Compile Include="Routines\Awake\FavoriteNumber.cs" />
     <Compile Include="Routines\Awake\ChitChat.cs" />
     <Compile Include="Routines\CreatePlayer.cs" />
+    <Compile Include="Routines\Dawn\BadDream.cs" />
     <Compile Include="Routines\Dawn\WhereAmI.cs" />
     <Compile Include="Routines\Dawn\NeedCoffee.cs" />
     <Compile Include="Routines\Dusk\BRB.cs" />
+    <Compile Include="Routines\Dusk\Bugs.cs" />
+    <Compile Include="Routines\Dusk\Broken.cs" />
     <Compile Include="Routines\Dusk\MathDaze.cs" />
     <Compile Include="Routines\Dusk\GettinGrouchy.cs" />
     <Compile Include="Routines\Dusk\Sleepy.cs" />

@@ -25,6 +25,13 @@ namespace RoguePoleDisplay
             _input = input;
         }
 
+        public Interaction Fade(Memory memory, char c, int millisecondsBetweenSteps = 0)
+        {
+            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            _renderer.Fade(c, millisecondsBetweenSteps);
+            return result;
+        } 
+
         public Interaction SlowTalk(Memory memory, string line1, string line2 = "", int msTypingDelay = 200, int millisecondTimeout = 5000)
         {
             Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };

@@ -78,7 +78,7 @@ namespace RoguePoleDisplay.Routines
                                 face.Talk(memory, "Fondon't.");
                                 break;
                             case 10:
-                                face.Talk(memory, "Fuck.");
+                                face.Talk(memory, "F*ck.");
                                 break;
                             default:
                                 face.Talk(memory, "After 10 of anything", "I lose interest.");

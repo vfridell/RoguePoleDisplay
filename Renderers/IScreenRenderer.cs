@@ -15,5 +15,6 @@ namespace RoguePoleDisplay.Renderers
         void DisplayMenu(Menu menu);
         void WritePosition(char c, int x, int y);
         void WriteProgressIndicator(int total, int start, int current);
+        void Fade(char c, int millisecondsBetweenSteps);
     }
 }
