@@ -25,7 +25,7 @@ namespace RoguePoleDisplay.Repositories
         private MemoryContext _session;
         static Memory() 
         {
-            CurrentState = ConsciousnessState.HalfState;
+            CurrentState = ConsciousnessState.AsleepState;
             LastState = ConsciousnessState.AsleepState;
         }
 

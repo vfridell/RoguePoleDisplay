@@ -14,9 +14,11 @@ namespace RoguePoleDisplay.Input
 {
     public class LeapInput : IGetInput
     {
-
+        private Leap.Controller _leapController;
         public void Init()
         {
+            _leapController = new Controller();
+            _leapController.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
         }
 
         public int GetInteger(int millisecondTimeout)
@@ -68,52 +70,55 @@ namespace RoguePoleDisplay.Input
             IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            using (Controller leapController = new Controller())
+                
+            int numFingers = -1;
+            DateTime choiceTime = ResetTimer(secondsToHold);
+            while (DateTime.Now < choiceTime )
             {
-                int numFingers = -1;
-                DateTime choiceTime = ResetTimer(secondsToHold);
-                while (DateTime.Now < choiceTime )
+                // Get the most recent frame and report some basic information
+                Frame frame = _leapController.Frame();
+
+                if (sw.ElapsedMilliseconds >= millisecondTimeout)
                 {
-                    if (sw.ElapsedMilliseconds >= millisecondTimeout)
+                    Console.WriteLine(string.Format("FPS: {0}", frame.CurrentFramesPerSecond));
+                    sw.Stop();
+                    return numFingers;
+                }
+
+                int oldNumFingers = numFingers;
+
+                if (!frame.Hands.IsEmpty)
+                {
+                    // Get the hands
+                    Hand hand1 = frame.Hands[0];
+                    Hand hand2 = frame.Hands[1];
+
+                    // Check if the hand has any fingers
+                    FingerList fingers = hand1.Fingers;
+                    if (!fingers.IsEmpty)
                     {
-                        sw.Stop();
-                        return numFingers;
+                        numFingers = fingers.Count;
                     }
 
-                    int oldNumFingers = numFingers;
-
-                    // Get the most recent frame and report some basic information
-                    Frame frame = leapController.Frame();
-
-                    if (!frame.Hands.IsEmpty)
+                    fingers = hand2.Fingers;
+                    if (!fingers.IsEmpty)
                     {
-                        // Get the hands
-                        Hand hand1 = frame.Hands[0];
-                        Hand hand2 = frame.Hands[1];
-
-                        // Check if the hand has any fingers
-                        FingerList fingers = hand1.Fingers;
-                        if (!fingers.IsEmpty)
-                        {
-                            numFingers = fingers.Count;
-                        }
-
-                        fingers = hand2.Fingers;
-                        if (!fingers.IsEmpty)
-                        {
-                            numFingers += fingers.Count;
-                        }
-                    }
-
-                    if (oldNumFingers != numFingers)
-                    {
-                        onRefresh(numFingers, renderer);
-                        choiceTime = ResetTimer(secondsToHold);
+                        numFingers += fingers.Count;
                     }
                 }
 
-                return numFingers;
+                if (oldNumFingers != numFingers)
+                {
+                    onRefresh(numFingers, renderer);
+                    choiceTime = ResetTimer(secondsToHold);
+                }
+                else
+                {
+                    //onRefresh((int)frame.CurrentFramesPerSecond, renderer);
+                }
             }
+
+            return numFingers;
         }
 
         private DateTime ResetTimer(int secondsFromNow)
