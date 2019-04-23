@@ -42,7 +42,7 @@ namespace RoguePoleDisplay
             return result;
         }
 
-        public Interaction Talk(Memory memory, string line1, string line2 = "", int millisecondTimeout = 5000)
+        public Interaction Talk(Memory memory, string line1, string line2 = "", int millisecondTimeout = 3000)
         {
             Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
             _renderer.Clear();
@@ -132,7 +132,7 @@ namespace RoguePoleDisplay
             _incrementer = null;
         }
 
-        public Interaction TalkInCircles(Memory memory, int millisecondTimeout = 5000, params string[] textLines)
+        public Interaction TalkInCircles(Memory memory, int millisecondTimeout = 3000, params string[] textLines)
         {
             if (null == _incrementer) _incrementer = new IndexIncrement(textLines.Length, true);
             string text = textLines[_incrementer.Next];
