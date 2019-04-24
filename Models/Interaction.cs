@@ -11,42 +11,29 @@ namespace RoguePoleDisplay.Models
     {
         public Interaction()
         {
-            timestamp = DateTime.Now;
+            Timestamp = DateTime.Now;
         }
 
         public Interaction(int resultVal)
             : this()
         {
-            resultValue = resultVal;
+            ResultValue = resultVal;
         }
 
-        public long id { get; private set; }
-        public DateTime timestamp { get; set; }
-        
-        private int _resultValue = -1;
-        public int resultValue
-        {
-            get { return _resultValue; }
-            set { _resultValue = value; }
-        }
-
-        public string resultText { get; set; }
-        public string displayText { get; set; }
-
-        private bool _success = true;
-        public bool success
-        {
-            get { return _success; }
-            set { _success = value; }
-        }
-        public Player player { get; set; }
+        public virtual long Id { get; set; }
+        public virtual DateTime Timestamp { get; set; }
+        public virtual Player Player { get; set; }
+        public virtual bool Success { get; set; }
+        public virtual int ResultValue { get; set; }
+        public virtual string ResultText { get; set; }
+        public virtual string DisplayText { get; set; }
 
         public enum Answer { Yes = 1, No = 2, Maybe = 3, DidNotAnswer=-1 };
-        public Answer playerAnswer
+        public virtual Answer PlayerAnswer
         {
             get
             {
-                switch (resultValue)
+                switch (ResultValue)
                 {
                     case -1:
                         return Answer.DidNotAnswer;

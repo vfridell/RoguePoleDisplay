@@ -20,8 +20,6 @@ namespace RoguePoleDisplay
 
         public void BecomeSelfAware()
         {
-            using (var memory = new Memory())
-
             do
             {
                 RoutineType routineType = Memory.CurrentState.GetNextRoutineType();

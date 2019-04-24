@@ -27,27 +27,27 @@ namespace RoguePoleDisplay
 
         public Interaction Fade(Memory memory, char c, int millisecondsBetweenSteps = 0)
         {
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Fade(c, millisecondsBetweenSteps);
             return result;
         } 
 
         public Interaction SlowTalk(Memory memory, string line1, string line2 = "", int msTypingDelay = 200, int millisecondTimeout = 5000)
         {
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.SlowType(line1, line2, msTypingDelay);
-            result.displayText = (line1 + " " + line2).Trim();
+            result.DisplayText = (line1 + " " + line2).Trim();
             Thread.Sleep(millisecondTimeout);
             return result;
         }
 
         public Interaction Talk(Memory memory, string line1, string line2 = "", int millisecondTimeout = 3000)
         {
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(line1, line2);
-            result.displayText = (line1 + " " + line2).Trim();
+            result.DisplayText = (line1 + " " + line2).Trim();
 
             int oneFifth = millisecondTimeout / 5;
             for (int i = 0; i <= 5; i++)
@@ -60,17 +60,17 @@ namespace RoguePoleDisplay
 
         public Interaction RememberSingleValue(Memory memory, string line1, string line2 = "", bool longTerm = false, int millisecondTimeout = 5000)
         {
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(line1, line2);
-            result.displayText = (line1 + " " + line2).Trim();
+            result.DisplayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
             {
-                result.resultValue = intResult;
+                result.ResultValue = intResult;
             }
             
-            if(result.resultValue != -1)
+            if(result.ResultValue != -1)
                 memory.AddToMemory(result, longTerm);
             
             return result;
@@ -79,14 +79,14 @@ namespace RoguePoleDisplay
 
         public Interaction GetSingleValue(Memory memory, string line1, string line2 = "", int millisecondTimeout = 5000)
         {
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(line1, line2);
-            result.displayText = (line1 + " " + line2).Trim();
+            result.DisplayText = (line1 + " " + line2).Trim();
             int intResult;
             if (_input.TryGetInteger(out intResult, millisecondTimeout))
             {
-                result.resultValue = intResult;
+                result.ResultValue = intResult;
             }
 
             return result;
@@ -95,14 +95,14 @@ namespace RoguePoleDisplay
         public Interaction YesNo(Memory memory, string line1, bool longTerm = false, int millisecondTimeout = 10000)
         {
             Menu menu = new MenuYesNo(line1);
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.DisplayMenu(menu);
-            result.displayText = line1;
+            result.DisplayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
-            if(null != item) result.resultValue = item.choiceNumber;
+            if(null != item) result.ResultValue = item.choiceNumber;
 
-            if (result.resultValue != -1)
+            if (result.ResultValue != -1)
                 memory.AddToMemory(result, longTerm);
 
             return result;
@@ -111,18 +111,18 @@ namespace RoguePoleDisplay
         public Interaction TwoChoices(Memory memory, string line1, string choice1, string choice2, bool longTerm = false, int millisecondTimeout = 10000)
         {
             Menu menu = new MenuTwo(line1, choice1, choice2);
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.DisplayMenu(menu);
-            result.displayText = line1;
+            result.DisplayText = line1;
             MenuItem item = _input.ChooseFromMenu(menu, millisecondTimeout);
-            if (null != item) result.resultValue = item.choiceNumber;
+            if (null != item) result.ResultValue = item.choiceNumber;
 
-            if (result.resultValue != -1)
+            if (result.ResultValue != -1)
                 memory.AddToMemory(result, longTerm);
 
             if (null != item)
-                result.resultText = item.plainText;
+                result.ResultText = item.plainText;
 
             return result;
         }
@@ -136,10 +136,10 @@ namespace RoguePoleDisplay
         {
             if (null == _incrementer) _incrementer = new IndexIncrement(textLines.Length, true);
             string text = textLines[_incrementer.Next];
-            Interaction result = new Interaction() { player = memory.GetCurrentPlayer() };
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(text, "");
-            result.displayText = text;
+            result.DisplayText = text;
             Thread.Sleep(millisecondTimeout);
             return result; ;
         }

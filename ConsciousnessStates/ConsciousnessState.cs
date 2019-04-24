@@ -33,6 +33,7 @@ namespace RoguePoleDisplay
         protected virtual void EnterState()
         {
             _stateEntered = DateTime.Now;
+            Memory.RoutinesCompleted = 0;
         }
     }
 }

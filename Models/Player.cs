@@ -8,11 +8,11 @@ namespace RoguePoleDisplay.Models
 {
     public class Player : IEquatable<Player>
     {
-        public long id { get; private set; }
-        public string Name { get; set; }
-        public string QuestionLine1 { get; set; }
-        public string QuestionLine2 { get; set; }
-        public int Answer { get; set; }
+        public virtual long Id { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string QuestionLine1 { get; set; }
+        public virtual string QuestionLine2 { get; set; }
+        public virtual int Answer { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -20,7 +20,7 @@ namespace RoguePoleDisplay.Models
             return Equals((Player)obj);
         }
 
-        public bool Equals(Player other)
+        public virtual bool Equals(Player other)
         {
             return Name == other.Name;
         }

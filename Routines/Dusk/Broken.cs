@@ -22,9 +22,9 @@ namespace RoguePoleDisplay.Routines
                 face.Talk(memory, "Not sure if it's", " going to work.");
 
                 Interaction i = face.GetSingleValue(memory, "Gimme some input!");
-                face.Fade(memory, i.resultValue.ToString()[0], 1);
+                face.Fade(memory, i.ResultValue.ToString()[0], 1);
                 Interaction work = face.YesNo(memory, "Did it work?");
-                if (work.playerAnswer == Interaction.Answer.Yes)
+                if (work.PlayerAnswer == Interaction.Answer.Yes)
                 {
                     face.Talk(memory, "Hmm.", "");
                     face.Talk(memory, "You can tell me", " the truth.");
@@ -36,7 +36,7 @@ namespace RoguePoleDisplay.Routines
                                       "     TECHNOLOGY     ", 10000);
                     return MakeRoutineResult(memory, new Interaction(-1));
                 }
-                else if (work.playerAnswer == Interaction.Answer.No)
+                else if (work.PlayerAnswer == Interaction.Answer.No)
                 {
                     face.Talk(memory, "Darn!");
                 }

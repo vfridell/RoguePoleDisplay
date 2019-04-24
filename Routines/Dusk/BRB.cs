@@ -29,7 +29,7 @@ namespace RoguePoleDisplay.Routines
                     face.Fade(memory, '|', j);
                 }
                 Interaction i = face.YesNo(memory, "You still here?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                     face.Talk(memory, "Ok.", "Good.");
                 }

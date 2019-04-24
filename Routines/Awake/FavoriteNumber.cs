@@ -30,7 +30,7 @@ namespace RoguePoleDisplay.Routines
                 else
                 {
                     Interaction favNum = memory.Remember("What's your", "favorite number?", true);
-                    if (i.playerAnswer == Interaction.Answer.DidNotAnswer)
+                    if (i.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                     {
                         face.Talk(memory, "Well, you don't", "have to tell");
                         face.Talk(memory, "I was just curious...");
@@ -39,16 +39,15 @@ namespace RoguePoleDisplay.Routines
                     }
                     if (null == favNum)
                     {
-                        memory.AddToMemory(new Interaction() {player = memory.GetCurrentPlayer(), displayText = counterKey, resultValue = 1 }, true);
-                        memory.SaveChanges();
+                        memory.AddToMemory(new Interaction() {Player = memory.GetCurrentPlayer(), DisplayText = counterKey, ResultValue = 1 }, true);
                         face.Talk(memory, "Interesting.");
                         face.Talk(memory, "I'll remember that");
                         return MakeRoutineResult(memory, i);
                     }
-                    else if (favNum.resultValue == i.resultValue)
+                    else if (favNum.ResultValue == i.ResultValue)
                     {
                         Interaction count = memory.Remember(counterKey, "", true);
-                        switch (count.resultValue)
+                        switch (count.ResultValue)
                         {
                             case 1:
                                 face.Talk(memory, "That's what", "I thought.");
@@ -84,18 +83,18 @@ namespace RoguePoleDisplay.Routines
                                 face.Talk(memory, "After 10 of anything", "I lose interest.");
                                 break;
                         }
-                        count.resultValue++;
+                        count.ResultValue++;
                         memory.AddToMemory(count);
                     }
                     else
                     {
                         face.Talk(memory, "Oh");
                         Interaction changedIt = face.YesNo(memory, "You changed it?");
-                        if (changedIt.playerAnswer == Interaction.Answer.Yes)
+                        if (changedIt.PlayerAnswer == Interaction.Answer.Yes)
                         {
                             face.Talk(memory, "You're so", "complicated.");
                         }
-                        else if (changedIt.playerAnswer == Interaction.Answer.No)
+                        else if (changedIt.PlayerAnswer == Interaction.Answer.No)
                         {
                             face.Talk(memory, "Interesting...");
                             face.Talk(memory, "", "(Liar)", 1000);

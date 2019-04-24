@@ -14,8 +14,6 @@ namespace TestPoleDisplayInput
     {
         static void Main(string[] args)
         {
-            using (var memory = new Memory())
-
                 do
                 {
                     RoutineType routineType = Memory.CurrentState.GetNextRoutineType();

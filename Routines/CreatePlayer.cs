@@ -24,11 +24,11 @@ namespace RoguePoleDisplay.Routines
                 if (null == player)
                 {
                     face.Talk(memory, "Sorry,", "I'm full on friends");
-                    return MakeRoutineResult(memory, new Interaction() { success = false });
+                    return MakeRoutineResult(memory, new Interaction() { Success = false });
                 }
 
                 Interaction newPlayer = face.RememberSingleValue(memory, player.QuestionLine1, player.QuestionLine2, longTerm: true);
-                if (newPlayer.playerAnswer == Interaction.Answer.DidNotAnswer)
+                if (newPlayer.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                 {
                     face.SlowTalk(memory, "Well");
                     face.Talk(memory, "We don't", "have to be friends");
@@ -36,9 +36,9 @@ namespace RoguePoleDisplay.Routines
                 }
                 else
                 {
-                    player.Answer = newPlayer.resultValue;
+                    player.Answer = newPlayer.ResultValue;
                     memory.SetCurrentPlayer(player);
-                    newPlayer.player = player;
+                    newPlayer.Player = player;
                     face.Talk(memory, "Great!");
                     face.Talk(memory, "I'll call you", player.Name, 8000);
                     face.Talk(memory, "Remember both the", "Q & A for next time", 8000);

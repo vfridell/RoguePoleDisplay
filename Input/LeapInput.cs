@@ -94,13 +94,13 @@ namespace RoguePoleDisplay.Input
                     Hand hand2 = frame.Hands[1];
 
                     // Check if the hand has any fingers
-                    FingerList fingers = hand1.Fingers;
+                    FingerList fingers = hand1.Fingers.Extended();
                     if (!fingers.IsEmpty)
                     {
                         numFingers = fingers.Count;
                     }
 
-                    fingers = hand2.Fingers;
+                    fingers = hand2.Fingers.Extended();
                     if (!fingers.IsEmpty)
                     {
                         numFingers += fingers.Count;

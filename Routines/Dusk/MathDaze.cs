@@ -27,7 +27,7 @@ namespace RoguePoleDisplay.Routines
                 {
                     MathProblem problem = new MathProblem();
                     i = face.GetSingleValue(memory, problem.ToString());
-                    if (i.resultValue == problem.TheAnswer)
+                    if (i.ResultValue == problem.TheAnswer)
                     {
                         correctAnswers++;
                         correct = true;
@@ -41,7 +41,7 @@ namespace RoguePoleDisplay.Routines
                             face.Talk(memory, "Nice.", string.Format("That's {0} in a row", correctAnswers));
                         }
                     }
-                    else if (i.playerAnswer == Interaction.Answer.DidNotAnswer)
+                    else if (i.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                     {
                         correct = false;
                         face.SlowTalk(memory, "Stumped??");

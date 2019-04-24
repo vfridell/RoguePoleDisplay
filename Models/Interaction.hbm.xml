@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="RoguePoleDisplay" namespace="RoguePoleDisplay.Models" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Interaction" lazy="true" >
+    <id name="Id" generator="identity" />
+    <property name="Timestamp"/>
+    <many-to-one name="Player" column="PlayerId" not-null="false" />
+    <property name="Success"/>
+    <property name="ResultValue"/>
+    <property name="ResultText"/>
+    <property name="DisplayText"/>
+  </class>
+</hibernate-mapping>

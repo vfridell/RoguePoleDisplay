@@ -41,7 +41,7 @@ namespace RoguePoleDisplay.Routines
                 face.Talk(memory, "", "", 30000);
                 ////////////////////////////////////01234567890123456789/////////////////////
                 Interaction i = face.YesNo(memory, "He's still watching?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                 ///////////////////////01234567890123456789/////////////////////
                     face.Talk(memory, "Well! I don't even", 

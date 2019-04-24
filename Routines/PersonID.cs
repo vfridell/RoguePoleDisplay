@@ -27,32 +27,32 @@ namespace RoguePoleDisplay.Routines
                     foreach (Player player in memory.GetKnownPlayers())
                     {
                         Interaction answer = face.GetSingleValue(memory, player.QuestionLine1, player.QuestionLine2, millisecondTimeout: 30000);
-                        if (answer.playerAnswer == Interaction.Answer.DidNotAnswer)
+                        if (answer.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                         {
                             face.Talk(memory, "I'm talking", "to myself.");
                             return MakeRoutineResult(memory, answer);
                         }
-                        else if (answer.resultValue == player.Answer)
+                        else if (answer.ResultValue == player.Answer)
                         {
                             face.Talk(memory, string.Format("Hey, {0}!", player.Name));
                             face.Talk(memory, "I knew you'd", "be back.");
                             memory.SetCurrentPlayer(player);
-                            answer.player = player;
+                            answer.Player = player;
                             return MakeRoutineResult(memory, answer);
                         }
                         face.Talk(memory, "Oh.", millisecondTimeout: 2000);
                         face.TalkInCircles(memory, 5000, "No", "That's not right", "Nope");
                         Interaction knowYou = memory.Remember("Do I know you?", "");
                         if (null == knowYou) knowYou = face.YesNo(memory, "Do I know you?");
-                        if (knowYou.playerAnswer == Interaction.Answer.DidNotAnswer)
+                        if (knowYou.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                         {
                             face.Talk(memory, "I'm talking", "to myself.");
                             return MakeRoutineResult(memory, answer);
                         }
-                        if (knowYou.playerAnswer == Interaction.Answer.No)
+                        if (knowYou.PlayerAnswer == Interaction.Answer.No)
                         {
                             face.Talk(memory, "Well, no wonder.");
-                            knowYou.success = false;
+                            knowYou.Success = false;
                             return MakeRoutineResult(memory, knowYou);
                         }
                         face.Talk(memory, "Well then, let's", "maybe try another");
@@ -63,7 +63,7 @@ namespace RoguePoleDisplay.Routines
                 {
                     face.Talk(memory, "But I guess", "that's not possible");
                 }
-                return MakeRoutineResult(memory, new Interaction() { success = false, resultValue = (int)Interaction.Answer.No });
+                return MakeRoutineResult(memory, new Interaction() { Success = false, ResultValue = (int)Interaction.Answer.No });
             }
         }
     }

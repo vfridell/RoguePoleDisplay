@@ -19,14 +19,14 @@ namespace RoguePoleDisplay.Routines
             using (var memory = new Memory())
             {
                 Interaction i = face.YesNo(memory, "Are you lost?");
-                if (i.playerAnswer == Interaction.Answer.DidNotAnswer)
+                if (i.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                 {
                     face.Talk(memory, "Nevermind");
                     face.Talk(memory, "I'm Talking", "to myself");
                     face.SlowTalk(memory, "again...");
                     return MakeRoutineResult(memory, i);
                 }
-                else if (i.playerAnswer == Interaction.Answer.No)
+                else if (i.PlayerAnswer == Interaction.Answer.No)
                 {
                     face.Talk(memory, "OK");
                     face.Talk(memory, "Just checking");
@@ -38,12 +38,12 @@ namespace RoguePoleDisplay.Routines
                 else
                 {
                     Interaction looking = face.YesNo(memory, "Need the bathroom?");
-                    if (looking.playerAnswer == Interaction.Answer.Yes)
+                    if (looking.PlayerAnswer == Interaction.Answer.Yes)
                     {
                         face.Talk(memory, "It's right there", "          =========>", 10000);
                         face.SlowTalk(memory, "By the way");
                         Interaction brNeed = face.TwoChoices(memory, "Which one?", "One", "Two");
-                        if (brNeed.playerAnswer == Interaction.Answer.DidNotAnswer)
+                        if (brNeed.PlayerAnswer == Interaction.Answer.DidNotAnswer)
                         {
                             face.Talk(memory, "Sorry.", "Too personal, I know");
                         }
@@ -55,7 +55,7 @@ namespace RoguePoleDisplay.Routines
                     }
 
                     looking = face.YesNo(memory, "Need Tech Support?");
-                    if (looking.playerAnswer == Interaction.Answer.Yes)
+                    if (looking.PlayerAnswer == Interaction.Answer.Yes)
                     {
                         face.Talk(memory, "Go that way", "<==========         ");
                         face.Talk(memory, "Until you see", "<==========         ");
@@ -65,7 +65,7 @@ namespace RoguePoleDisplay.Routines
                     }
 
                     looking = face.YesNo(memory, "Need books?");
-                    if (looking.playerAnswer == Interaction.Answer.Yes)
+                    if (looking.PlayerAnswer == Interaction.Answer.Yes)
                     {
                         face.Talk(memory, "Look anywhere but", "the first floor.");
                         face.Talk(memory, "They are kinda", "taking those away.");
@@ -76,7 +76,7 @@ namespace RoguePoleDisplay.Routines
                     }
 
                     looking = face.YesNo(memory, "Need the ARC?");
-                    if (looking.playerAnswer == Interaction.Answer.Yes)
+                    if (looking.PlayerAnswer == Interaction.Answer.Yes)
                     {
                         face.Talk(memory, "Go that way", "<==========         ");
                     ///////////////////////01234567890123456789////////////////////

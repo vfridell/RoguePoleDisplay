@@ -32,7 +32,7 @@ namespace RoguePoleDisplay.Routines
         private bool CheckForAnything(Memory memory, Face face, string line1, string line2, out Interaction i)
         {
             i = face.RememberSingleValue(memory, line1, line2, false, 1000);
-            if (i.playerAnswer != Interaction.Answer.DidNotAnswer)
+            if (i.PlayerAnswer != Interaction.Answer.DidNotAnswer)
                 return true;
             else 
                 return false;

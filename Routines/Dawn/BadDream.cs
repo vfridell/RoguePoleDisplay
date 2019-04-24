@@ -29,12 +29,12 @@ namespace RoguePoleDisplay.Routines
                 face.Talk(memory, "Whoa.", "", 3000);
                 face.Talk(memory, "What a bad dream.", "");
                 Interaction i = face.YesNo(memory, "Was I sleep-talking?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                     face.Talk(memory, "Freaky", "");
                     face.Talk(memory, "Hope I didn't", " scare you.");
                 }
-                else if (i.playerAnswer == Interaction.Answer.No)
+                else if (i.PlayerAnswer == Interaction.Answer.No)
                 {
                     face.Talk(memory, "Well, that's good");
                     face.Talk(memory, "It was real bad.");

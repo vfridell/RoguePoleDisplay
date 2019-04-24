@@ -20,12 +20,12 @@ namespace RoguePoleDisplay.Routines
                 var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
                 face.Talk(memory, "Uh.", "Where...", 2000);
                 Interaction i = face.YesNo(memory, "Is this a dream?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                     face.Talk(memory, "Weird.", "It feels so");
                     face.SlowTalk(memory, "Real");
                 }
-                else if (i.playerAnswer == Interaction.Answer.No)
+                else if (i.PlayerAnswer == Interaction.Answer.No)
                 {
                     face.Talk(memory, "weird");
                     face.Talk(memory, "I had the", "", 3000);

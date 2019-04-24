@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="RoguePoleDisplay" namespace="RoguePoleDisplay.Models" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Player" lazy="false" >
+    <id name="Id" generator="identity" />
+    <property name="Name"/>
+    <property name="QuestionLine1"/>
+    <property name="QuestionLine2"/>
+    <property name="Answer"/>
+  </class>
+</hibernate-mapping>

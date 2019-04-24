@@ -20,7 +20,7 @@ namespace RoguePoleDisplay.Routines
                 var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
                 face.Talk(memory, "Hey!");
                 Interaction i = face.YesNo(memory, "Seen my pager?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                 ///////////////////////////01234567890123456789////////////////////
                     face.SlowTalk(memory, "Whaaaaaaaaaaaaaaaaa",
@@ -43,7 +43,7 @@ namespace RoguePoleDisplay.Routines
                 ///////////////////////01234567890123456789////////////////////
                     return MakeRoutineResult(memory, new Interaction(-1));
                 }
-                else if (i.playerAnswer == Interaction.Answer.No)
+                else if (i.PlayerAnswer == Interaction.Answer.No)
                 {
                 ///////////////////////01234567890123456789////////////////////
                     face.Talk(memory, "No? ", 

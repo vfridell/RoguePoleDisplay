@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This is the System.Data.dll provider for SQL Server -->
+<hibernate-configuration  xmlns="urn:nhibernate-configuration-2.2" >
+  <session-factory name="RoguePoleDisplay">
+    <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+    <property name="connection.connection_string_name">RoguePoleDisplay</property>
+    <property name="dialect">NHibernate.Dialect.MsSql2012Dialect</property>
+    <property name="adonet.batch_size">10</property>
+    <property name="show_sql">false</property>
+    <property name="command_timeout">1000</property>
+    <property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
+    <property name="cache.provider_class">NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache</property>
+    <property name="cache.default_expiration">600</property>
+  </session-factory>
+</hibernate-configuration>

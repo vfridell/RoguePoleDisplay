@@ -22,7 +22,7 @@ namespace RoguePoleDisplay.Routines
                 face.Talk(memory, "I may just reply.", "@BellarmineIT", 10000);
                 face.Talk(memory, "No guarantees", "", 1000);
                 Interaction i = face.YesNo(memory, "Will you tweet me?");
-                switch (i.playerAnswer)
+                switch (i.PlayerAnswer)
                 {
                     case Interaction.Answer.Yes:
                         face.Talk(memory, "Cool!");

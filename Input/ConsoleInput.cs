@@ -23,7 +23,7 @@ namespace RoguePoleDisplay.Input
                 consoleListener.InteractionHandled += consoleListener_InteractionHandled;
                 consoleListener.Start();
                 getInput.WaitOne(millisecondTimeout);
-                return _interaction.resultValue;
+                return _interaction.ResultValue;
             }
         }
 
@@ -47,7 +47,7 @@ namespace RoguePoleDisplay.Input
                 consoleListener.InteractionHandled += consoleListener_InteractionHandled;
                 consoleListener.Start();
                 getInput.WaitOne(millisecondTimeout);
-                value = _interaction.resultValue;
+                value = _interaction.ResultValue;
                 return _interactionHappened;
             }
         }
@@ -66,8 +66,8 @@ namespace RoguePoleDisplay.Input
                 consoleListener.Start();
                 Console.Write("Enter choice: ");
                 getInput.WaitOne(millisecondTimeout);
-                if (menu.ValidChoice(_interaction.resultValue))
-                    return menu.GetMenuItem(_interaction.resultValue);
+                if (menu.ValidChoice(_interaction.ResultValue))
+                    return menu.GetMenuItem(_interaction.ResultValue);
                 else
                     return null;
             }

@@ -47,9 +47,9 @@ namespace RoguePoleDisplay.Routines
                 FinalInteraction = finalInteraction,
                 RoutineType = this.GetType().ToString()
             };
-            if (finalInteraction.playerAnswer != Interaction.Answer.DidNotAnswer)
+            if (finalInteraction.PlayerAnswer != Interaction.Answer.DidNotAnswer)
             {
-                result.FinalState = finalInteraction.success ? RoutineFinalState.Success : RoutineFinalState.Failure;
+                result.FinalState = finalInteraction.Success ? RoutineFinalState.Success : RoutineFinalState.Failure;
             }
             memory.AddToMemory(result);
             return result;

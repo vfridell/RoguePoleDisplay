@@ -24,7 +24,7 @@ namespace RoguePoleDisplay.Routines
                 face.Talk(memory, "...");
                 face.Talk(memory, "I need", "coffee");
                 Interaction i = face.YesNo(memory, "Got any coffee?");
-                if (i.playerAnswer == Interaction.Answer.Yes)
+                if (i.PlayerAnswer == Interaction.Answer.Yes)
                 {
                     face.Talk(memory, "If only", "I had a mouth.");
                 }
