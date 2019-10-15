@@ -11,6 +11,7 @@ namespace RoguePoleDisplay.Models
     {
         public Interaction()
         {
+            ResultValue = -1;
             Timestamp = DateTime.Now;
         }
 

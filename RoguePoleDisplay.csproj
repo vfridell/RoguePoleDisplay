@@ -109,6 +109,7 @@
     <Compile Include="ConsciousnessStates\Awake.cs" />
     <Compile Include="ConsciousnessStates\Friendly.cs" />
     <Compile Include="ConsciousnessStates\Half.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="InputListeners\ConsoleListener.cs" />
     <Compile Include="InputListeners\InputListener.cs" />
     <Compile Include="InputListeners\LeapInputListener.cs" />

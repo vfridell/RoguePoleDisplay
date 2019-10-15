@@ -20,11 +20,14 @@ namespace RoguePoleDisplay
         {
             if (!_initialized)
             {
-                _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
-                _serialPort.Open();
-                _initialized = true;
-                Clear();
-                SetNoVerticalScroll();
+                lock (myLock)
+                {
+                    _serialPort = new SerialPort("COM1", 4800, Parity.None, 8, StopBits.One);
+                    _serialPort.Open();
+                    _initialized = true;
+                    Clear();
+                    SetNoVerticalScroll();
+                }
             }
         }
 
@@ -88,8 +91,11 @@ namespace RoguePoleDisplay
         {
             set
             {
-                Write(ControlCommand.DIM);
-                Write(((char)value).ToString());
+                lock (myLock)
+                {
+                    Write(ControlCommand.DIM);
+                    Write(((char)value).ToString());
+                }
             }
         }
 
@@ -117,15 +123,18 @@ namespace RoguePoleDisplay
             }
 
             Random rnd = new Random();
-            for (int i = 39; i >= 0; i--)
+            lock (myLock)
             {
-                int pos = rnd.Next(0, i);
-                char cpos = cPositions[pos];
-                Write(ControlCommand.SETPOSITION);
-                Write(cpos.ToString());
-                Write(c.ToString());
-                cPositions.Remove(cpos);
-                if (millisecondsBetweenSteps > 0) Thread.Sleep(millisecondsBetweenSteps);
+                for (int i = 39; i >= 0; i--)
+                {
+                    int pos = rnd.Next(0, i);
+                    char cpos = cPositions[pos];
+                    Write(ControlCommand.SETPOSITION);
+                    Write(cpos.ToString());
+                    Write(c.ToString());
+                    cPositions.Remove(cpos);
+                    if (millisecondsBetweenSteps > 0) Thread.Sleep(millisecondsBetweenSteps);
+                }
             }
         }
 
@@ -135,28 +144,37 @@ namespace RoguePoleDisplay
             if(pos > 39) throw new Exception(string.Format("Bad position given: {0}, {1}", x, y));
 
             char cpos = (char)pos;
-            Write(ControlCommand.SETPOSITION);
-            Write(cpos.ToString());
-            Write(c.ToString());
+            lock(myLock)
+            {
+                Write(ControlCommand.SETPOSITION);
+                Write(cpos.ToString());
+                Write(c.ToString());
+            }
         }
 
         public void WriteMenu(Menu menu)
         {
             if (menu.NumberOfChoices == 2)
             {
-                Write(menu.topLine);
-                Write(menu.GetMenuItem(1).choiceNumberAndText);
-                Write('|');
-                Write(menu.GetMenuItem(2).choiceNumberAndText);
+                lock (myLock)
+                {
+                    Write(menu.topLine);
+                    Write(menu.GetMenuItem(1).choiceNumberAndText);
+                    Write('|');
+                    Write(menu.GetMenuItem(2).choiceNumberAndText);
+                }
             }
             else if(menu.NumberOfChoices == 4)
             {
-                Write(menu.GetMenuItem(1).choiceNumberAndText);
-                Write('|');
-                Write(menu.GetMenuItem(2).choiceNumberAndText);
-                Write(menu.GetMenuItem(3).choiceNumberAndText);
-                Write('|');
-                Write(menu.GetMenuItem(4).choiceNumberAndText);
+                lock (myLock)
+                {
+                    Write(menu.GetMenuItem(1).choiceNumberAndText);
+                    Write('|');
+                    Write(menu.GetMenuItem(2).choiceNumberAndText);
+                    Write(menu.GetMenuItem(3).choiceNumberAndText);
+                    Write('|');
+                    Write(menu.GetMenuItem(4).choiceNumberAndText);
+                }
             }
             else
             {

@@ -9,15 +9,18 @@ using Leap;
 using RoguePoleDisplay.Renderers;
 using System.Threading;
 using System.Diagnostics;
+using RoguePoleDisplay.InputListeners;
 
 namespace RoguePoleDisplay.Input
 {
     public class LeapInput : IGetInput
     {
+        private LeapInputListener _leapInputListener;
         private Leap.Controller _leapController;
         public void Init()
         {
-            _leapController = new Controller();
+            _leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer());
+            _leapController = new Controller(_leapInputListener);
             _leapController.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
         }
 
@@ -45,24 +48,47 @@ namespace RoguePoleDisplay.Input
 
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
-            TaskCompletionSource<int> taskSource = new TaskCompletionSource<int>();
-            Task<int> t = taskSource.Task;
-            Task.Factory.StartNew(() =>
-            {
-                int fingers = GetFingers(5, 10, millisecondTimeout,
+            var cancellationTokenSrc = new CancellationTokenSource(millisecondTimeout);
+            var value = GetFingersAsync(5, 10, cancellationTokenSrc.Token,
                  (choice, renderer) =>
                  {
                      Console.WriteLine(choice.ToString());
                      menu.Highlight(choice);
                      renderer.DisplayMenu(menu);
                  });
-                taskSource.SetResult(fingers);
-            });
-            int value = t.Result;
+
             if (!menu.ValidChoice(value))
                 return null;
             else
                 return menu.GetMenuItem(value);
+        }
+
+        private int GetFingersAsync(int secondsToHold, int numberOfChoices, CancellationToken cancellationToken, Action<int, IScreenRenderer> onRefresh)
+        {
+            IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
+            int numFingers = _leapInputListener.NumFingersAverage;
+
+            DateTime choiceTime = ResetTimer(secondsToHold);
+            while (DateTime.Now < choiceTime)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return numFingers;
+                }
+
+                int oldNumFingers = numFingers;
+                if (oldNumFingers != numFingers)
+                {
+                    onRefresh(numFingers, renderer);
+                    choiceTime = ResetTimer(secondsToHold);
+                }
+                else
+                {
+                    //onRefresh((int)frame.CurrentFramesPerSecond, renderer);
+                }
+            }
+
+            return numFingers;
         }
 
         private int GetFingers(int secondsToHold, int numberOfChoices, int millisecondTimeout, Action<int, IScreenRenderer> onRefresh)

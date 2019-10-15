@@ -13,7 +13,8 @@ namespace RoguePoleDisplay.Repositories
     public class Memory : IDisposable
     {
         private static Random _rand = new Random();
-        private static TimeSpan _shortTermMemoryLimit = new TimeSpan(1, 30, 0); // 90 minutes
+        private static TimeSpan _shortTermMemoryLimit = new TimeSpan(0, 2, 0); // 90 minutes
+        //private static TimeSpan _shortTermMemoryLimit = new TimeSpan(1, 30, 0); // 90 minutes
         static Memory() 
         {
             CurrentState = ConsciousnessState.AsleepState;
@@ -113,9 +114,10 @@ namespace RoguePoleDisplay.Repositories
 
             // time to forget
             _shortTerm.RemoveAll(i => i.Timestamp < interaction.Timestamp - _shortTermMemoryLimit);
-            IEnumerable<MemoryKey> keysToRemove = _textMemory.Values
+            List<MemoryKey> keysToRemove = _textMemory.Values
                                                     .Where(t => t.Timestamp < interaction.Timestamp - _shortTermMemoryLimit)
-                                                    .Select(i => MakeMemoryKey(i));
+                                                    .Select(i => MakeMemoryKey(i))
+                                                    .ToList();
             foreach (MemoryKey k in keysToRemove) _textMemory.Remove(k);
         }
 

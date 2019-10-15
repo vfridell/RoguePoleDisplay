@@ -1,5 +1,8 @@
-﻿using RoguePoleDisplay;
+﻿using Leap;
+using RoguePoleDisplay;
+using RoguePoleDisplay.InputListeners;
 using RoguePoleDisplay.Models;
+using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Repositories;
 using RoguePoleDisplay.Routines;
 using System;
@@ -14,7 +17,19 @@ namespace TestPoleDisplayInput
     {
         static void Main(string[] args)
         {
-                do
+
+            IScreenRenderer _renderer = RendererFactory.GetPreferredRenderer();
+            var _leapInputListener = new LeapInputListener(_renderer);
+            var _leapController = new Controller(_leapInputListener);
+            _leapController.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
+
+            while(true)
+            {
+                Task.Delay(100);
+                _renderer.WritePosition(_leapInputListener.LastNumFingers.ToString()[0], 0, 0);
+            }
+
+            do
                 {
                     RoutineType routineType = Memory.CurrentState.GetNextRoutineType();
                     Routine currentRoutine = RoutineFactory.GetRoutine(routineType);
