@@ -10,16 +10,23 @@ namespace RoguePoleDisplay.Renderers
     {
         public void Init()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetWindowSize(20, 3);
+            Console.Title = "Rogue";
+            Console.SetCursorPosition(0, 0);
         }
 
         public void Write(string line1, string line2)
         {
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine(line1);
-            Console.WriteLine(line2);
+            Console.Write(line2);
         }
 
         public void SlowType(string line1, string line2, int msTypingDelay = 200)
         {
+            Console.SetCursorPosition(0, 0);
             foreach (char c in line1)
             {
                 Console.Write(c);
@@ -31,7 +38,6 @@ namespace RoguePoleDisplay.Renderers
                 Console.Write(c);
                 System.Threading.Thread.Sleep(msTypingDelay);
             }
-            Console.WriteLine();
         }
 
         public void Clear()
@@ -41,33 +47,65 @@ namespace RoguePoleDisplay.Renderers
 
         public void DisplayMenu(Menu menu)
         {
-            List<MenuItem> items = menu.GetMenuItems();
-            items.ForEach((i) => Console.WriteLine(i.choiceNumberAndText));
+            Console.SetCursorPosition(0, 0);
+            if (menu.NumberOfChoices == 2)
+            {
+                Console.Write(menu.topLine);
+                Console.WriteLine();
+                Console.Write(menu.GetMenuItem(1).choiceNumberAndText);
+                Console.Write('|');
+                Console.Write(menu.GetMenuItem(2).choiceNumberAndText);
+            }
+            else if (menu.NumberOfChoices == 4)
+            {
+                Console.Write(menu.GetMenuItem(1).choiceNumberAndText);
+                Console.Write('|');
+                Console.Write(menu.GetMenuItem(2).choiceNumberAndText);
+                Console.WriteLine();
+                Console.Write(menu.GetMenuItem(3).choiceNumberAndText);
+                Console.Write('|');
+                Console.Write(menu.GetMenuItem(4).choiceNumberAndText);
+            }
+            else
+            {
+                throw new Exception(string.Format("Strange menu type detected."));
+            }
         }
 
         public void WritePosition(char c, int x, int y)
         {
-            throw new NotImplementedException();
+            Console.SetCursorPosition(x, y);
+            Console.Write(c);
         }
-
-        #region IScreenRenderer Members
-
 
         public void WriteProgressIndicator(int total, int start, int current)
         {
-            throw new NotImplementedException();
+            char[] indicators = { '|', '/', '-', '\\', '|', '+' };
+            int index = Convert.ToInt32((Convert.ToDouble(current) / Convert.ToDouble(total)) * Convert.ToDouble(total));
+            WritePosition(indicators[index], 19, 0);
         }
 
-        #endregion
-
-        #region IScreenRenderer Members
-
-
-        public void Fade(char c, int millisecondsBetweenSteps)
+        public void Fade(char c, int millisecondsBetweenSteps = 0)
         {
-            throw new NotImplementedException();
-        }
+            List<(int, int)> cPositions = new List<(int, int)>();
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    cPositions.Add((i, j));
+                }
+            }
 
-        #endregion
+            Random rnd = new Random();
+            for (int i = 39; i >= 0; i--)
+            {
+                int index = rnd.Next(0, i);
+                (int x, int y) = cPositions[index];
+
+                WritePosition(c, x, y);
+                cPositions.Remove((x,y));
+                if (millisecondsBetweenSteps > 0) Task.Delay(millisecondsBetweenSteps);
+            }
+        }
     }
 }
