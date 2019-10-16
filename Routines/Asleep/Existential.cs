@@ -62,14 +62,5 @@ namespace RoguePoleDisplay.Routines
                 return MakeRoutineResult(memory, i);
             }
         }
-
-        private bool CheckForAnything(Memory memory, Face face, string line1, string line2, int timeoutMS, out Interaction i)
-        {
-            i = face.RememberSingleValue(memory, line1, line2, false, timeoutMS);
-            if (i.PlayerAnswer != Interaction.Answer.DidNotAnswer)
-                return true;
-            else 
-                return false;
-        }
     }
 }

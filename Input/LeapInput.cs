@@ -41,6 +41,7 @@ namespace RoguePoleDisplay.Input
                 Console.WriteLine(choice.ToString());
             };
 
+            _leapInputListener.ResetTracking();
             using (_leapInputListener.Subscribe(this))
             {
                 if (_waitHandle.WaitOne(millisecondTimeout))
@@ -55,7 +56,7 @@ namespace RoguePoleDisplay.Input
 
             // give the user a chance to see the final choice
             _interactiveRenderAction(value);
-            Task.Delay(500);
+            Task.Delay(1000);
 
             return value > 0;
         }
@@ -69,6 +70,7 @@ namespace RoguePoleDisplay.Input
                 RendererFactory.GetPreferredRenderer().DisplayMenu(menu);
             };
 
+            _leapInputListener.ResetTracking();
             int value;
             using (_leapInputListener.Subscribe(this))
             {
@@ -84,7 +86,7 @@ namespace RoguePoleDisplay.Input
 
             // give the user a chance to see the final choice
             _interactiveRenderAction(value);
-            Task.Delay(500);
+            Task.Delay(1000);
 
             if (!menu.ValidChoice(value))
                 return null;
@@ -99,7 +101,7 @@ namespace RoguePoleDisplay.Input
 
         public void OnError(Exception error)
         {
-            throw error;
+            throw new Exception("OnError caught an exception", error);
         }
 
         public void OnCompleted()

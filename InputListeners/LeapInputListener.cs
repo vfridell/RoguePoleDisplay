@@ -24,14 +24,16 @@ namespace RoguePoleDisplay.InputListeners
         private List<IObserver<InputData>> _observers = new List<IObserver<InputData>>();
         private ConcurrentQueue<int> _fingersHistogram = new ConcurrentQueue<int>();
 
-        private void ResetHistogram()
+        public void ResetTracking()
         {
+            LastNumFingers = 0;
+            LastXmitLeapData = new InputData() { LastNumEntered = 0 };
             for (int i = 0; i<_queueLength; i++) _fingersHistogram.Enqueue(0);
         }
 
         public LeapInputListener(IScreenRenderer renderer)
         {
-            ResetHistogram();
+            ResetTracking();
             _renderer = renderer;
         }
 
@@ -84,7 +86,6 @@ namespace RoguePoleDisplay.InputListeners
                 {
                     foreach (var observer in _observers) observer.OnCompleted();
                 }
-                ResetHistogram();
             }
         }
 
