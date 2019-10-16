@@ -29,7 +29,7 @@ namespace RoguePoleDisplay.InputListeners
 
         protected virtual void OnInteractionHandled(InteractionEventArgs e)
         {
-            if (InteractionHandled != null) InteractionHandled(this, e);
+            InteractionHandled?.Invoke(this, e);
         }
 
         public virtual void Start()
