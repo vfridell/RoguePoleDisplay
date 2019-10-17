@@ -57,7 +57,7 @@ namespace RoguePoleDisplay.Routines
 
         public static Routine GetCreateLoginRoutine()
         {
-            Type routineType = _routinesTypes.First<KeyValuePair<Type, RoutineTypeAttribute>>(t => t.Value.routineType == RoutineType.CreateLogin&& t.Value.order == 0).Key;
+            Type routineType = _routinesTypes.First<KeyValuePair<Type, RoutineTypeAttribute>>(t => t.Value.routineType == RoutineType.CreateLogin && t.Value.order == 0).Key;
             return CreateAndInitRoutine(routineType);
         }
 

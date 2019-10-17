@@ -49,7 +49,7 @@ namespace RoguePoleDisplay.Routines
             };
             if (finalInteraction.PlayerAnswer != Interaction.Answer.DidNotAnswer)
             {
-                result.FinalState = finalInteraction.Success ? RoutineFinalState.Success : RoutineFinalState.Failure;
+                result.FinalState = finalInteraction.Success ? RoutineFinalState.One : RoutineFinalState.Two;
             }
             memory.AddToMemory(result);
             return result;

@@ -15,14 +15,12 @@ namespace RoguePoleDisplay.Input
 {
     public class LeapInput : IGetInput
     {
-        private LeapInputListener _leapInputListener;
         private Leap.Controller _leapController;
         private EventWaitHandle _waitHandle = new AutoResetEvent(false);
 
         public void Init()
         {
-            _leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer());
-            _leapController = new Controller(_leapInputListener);
+            _leapController = new Controller();
             _leapController.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
         }
 
@@ -38,25 +36,25 @@ namespace RoguePoleDisplay.Input
             _interactiveRenderAction = (choice) =>
             {
                 RendererFactory.GetPreferredRenderer().WritePosition(choice.ToString()[0], 19, 1);
-                Console.WriteLine(choice.ToString());
             };
 
-            _leapInputListener.ResetTracking();
-            using (_leapInputListener.Subscribe(this))
+            using (var leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer()))
+            using (leapInputListener.Subscribe(this))
             {
+                _leapController.AddListener(leapInputListener);
                 if (_waitHandle.WaitOne(millisecondTimeout))
                 {
-                    value = _leapInputListener.LastXmitLeapData.LastNumEntered;
+                    value = leapInputListener.LastXmitLeapData.LastNumEntered;
                 }
                 else // timed out
                 {
                     value = 0;
                 }
+                _leapController.RemoveListener(leapInputListener);
             }
 
             // give the user a chance to see the final choice
             _interactiveRenderAction(value);
-            Task.Delay(1000);
 
             return value > 0;
         }
@@ -65,28 +63,28 @@ namespace RoguePoleDisplay.Input
         {
             _interactiveRenderAction = (choice) =>
             {
-                Console.WriteLine(choice.ToString());
                 menu.Highlight(choice);
                 RendererFactory.GetPreferredRenderer().DisplayMenu(menu);
             };
 
-            _leapInputListener.ResetTracking();
             int value;
-            using (_leapInputListener.Subscribe(this))
+            using (var leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer()))
+            using (leapInputListener.Subscribe(this))
             {
+                _leapController.AddListener(leapInputListener);
                 if (_waitHandle.WaitOne(millisecondTimeout))
                 {
-                    value = _leapInputListener.LastXmitLeapData.LastNumEntered;
+                    value = leapInputListener.LastXmitLeapData.LastNumEntered;
                 }
                 else // timed out
                 {
                     value = 0;
                 }
+                _leapController.RemoveListener(leapInputListener);
             }
 
             // give the user a chance to see the final choice
             _interactiveRenderAction(value);
-            Task.Delay(1000);
 
             if (!menu.ValidChoice(value))
                 return null;

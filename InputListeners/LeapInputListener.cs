@@ -19,8 +19,8 @@ namespace RoguePoleDisplay.InputListeners
         public InputData LastXmitLeapData = new InputData() { LastNumEntered = 0 };
 
         private IScreenRenderer _renderer { get; set; }
-        private int _queueLength = 50;
-        private int _consistentFramesNum = 30;
+        private int _queueLength = 300;
+        private int _consistentFramesNum = 200;
         private List<IObserver<InputData>> _observers = new List<IObserver<InputData>>();
         private ConcurrentQueue<int> _fingersHistogram = new ConcurrentQueue<int>();
 
@@ -64,10 +64,6 @@ namespace RoguePoleDisplay.InputListeners
                 _fingersHistogram.Enqueue(numFingers);
                 LastNumFingers = numFingers;
             }
-            else
-            {
-                _fingersHistogram.Enqueue(0);
-            }
 
             while (_fingersHistogram.Count >= _queueLength) _fingersHistogram.TryDequeue(out int _);
 
@@ -79,9 +75,9 @@ namespace RoguePoleDisplay.InputListeners
                     foreach (var observer in _observers) observer.OnNext(leapData);
                 }
             }
-            if(ConsistentNumFingers) // && !LastXmitLeapData.Equals(leapData))
+            if (ConsistentNumFingers) // && !LastXmitLeapData.Equals(leapData))
             {
-                LastXmitLeapData = GetLeapData();
+                LastXmitLeapData = new InputData() { LastNumEntered = NumFingersAverage };
                 lock (_observers)
                 {
                     foreach (var observer in _observers) observer.OnCompleted();
@@ -96,12 +92,10 @@ namespace RoguePoleDisplay.InputListeners
                 if (!_observers.Contains(observer))
                 {
                     _observers.Add(observer);
-                    observer.OnNext(GetLeapData());
                 }
                 return new Unsubscriber<InputData>(_observers, observer);
             }
         }
 
-        public InputData GetLeapData() => new InputData() { LastNumEntered = NumFingersAverage };
     }
 }

@@ -13,8 +13,8 @@ namespace RoguePoleDisplay.Repositories
     public class Memory : IDisposable
     {
         private static Random _rand = new Random();
-        private static TimeSpan _shortTermMemoryLimit = new TimeSpan(0, 2, 0); // 90 minutes
-        //private static TimeSpan _shortTermMemoryLimit = new TimeSpan(1, 30, 0); // 90 minutes
+        //private static TimeSpan _shortTermMemoryLimit = new TimeSpan(0, 2, 0); // 90 minutes
+        private static TimeSpan _shortTermMemoryLimit = new TimeSpan(1, 30, 0); // 90 minutes
         static Memory() 
         {
             CurrentState = ConsciousnessState.AsleepState;

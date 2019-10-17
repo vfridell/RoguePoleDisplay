@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoguePoleDisplay.Models
 {
-    public enum RoutineFinalState { Abandoned, Success, Failure };
+    public enum RoutineFinalState { Abandoned, One, Two };
 
     public class RoutineResult
     {
