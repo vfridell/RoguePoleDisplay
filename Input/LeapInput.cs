@@ -17,6 +17,7 @@ namespace RoguePoleDisplay.Input
     {
         private Leap.Controller _leapController;
         private EventWaitHandle _waitHandle = new AutoResetEvent(false);
+        private InputData _lastObservedInputData;
 
         public void Init()
         {
@@ -33,12 +34,15 @@ namespace RoguePoleDisplay.Input
 
         public bool TryGetInteger(out int value, int millisecondTimeout)
         {
+            _waitHandle.Reset();
+            _lastObservedInputData = new InputData();
             _interactiveRenderAction = (choice) =>
             {
                 RendererFactory.GetPreferredRenderer().WritePosition(choice.ToString()[0], 19, 1);
             };
 
-            using (var leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer()))
+            int queueLength = LeapInputListener.GetQueueLength(millisecondTimeout);
+            using (var leapInputListener = new LeapInputListener(queueLength, RendererFactory.GetPreferredRenderer()))
             using (leapInputListener.Subscribe(this))
             {
                 _leapController.AddListener(leapInputListener);
@@ -48,7 +52,8 @@ namespace RoguePoleDisplay.Input
                 }
                 else // timed out
                 {
-                    value = 0;
+                    // use the last observed value
+                    value = _lastObservedInputData.LastNumEntered;
                 }
                 _leapController.RemoveListener(leapInputListener);
             }
@@ -61,6 +66,8 @@ namespace RoguePoleDisplay.Input
 
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
+            _waitHandle.Reset();
+            _lastObservedInputData = new InputData();
             _interactiveRenderAction = (choice) =>
             {
                 menu.Highlight(choice);
@@ -68,7 +75,8 @@ namespace RoguePoleDisplay.Input
             };
 
             int value;
-            using (var leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer()))
+            int queueLength = LeapInputListener.GetQueueLength(millisecondTimeout);
+            using (var leapInputListener = new LeapInputListener(queueLength, RendererFactory.GetPreferredRenderer()))
             using (leapInputListener.Subscribe(this))
             {
                 _leapController.AddListener(leapInputListener);
@@ -78,7 +86,8 @@ namespace RoguePoleDisplay.Input
                 }
                 else // timed out
                 {
-                    value = 0;
+                    // use the last observed value
+                    value = _lastObservedInputData.LastNumEntered;
                 }
                 _leapController.RemoveListener(leapInputListener);
             }
@@ -94,6 +103,7 @@ namespace RoguePoleDisplay.Input
 
         public void OnNext(InputData value)
         {
+            _lastObservedInputData = value;
             _interactiveRenderAction?.Invoke(value.LastNumEntered);
         }
 

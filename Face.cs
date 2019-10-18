@@ -16,7 +16,7 @@ namespace RoguePoleDisplay
 {
     public class Face
     {
-        ILog _log;
+        ILog _log = LogManager.GetLogger("RoguePoleDisplay");
         IScreenRenderer _renderer;
         IGetInput _input;
 
@@ -24,7 +24,6 @@ namespace RoguePoleDisplay
 
         public Face(IScreenRenderer renderer, IGetInput input)
         {
-            _log = LogManager.GetLogger("RoguePoleDisplay");
             _renderer = renderer;
             _input = input;
         }

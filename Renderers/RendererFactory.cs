@@ -14,8 +14,8 @@ namespace RoguePoleDisplay.Renderers
         {
             if (null == _renderer)
             {
-                _renderer = new ConsoleRenderer();
-                //_renderer = new PoleDisplayRenderer();
+                //_renderer = new ConsoleRenderer();
+                _renderer = new PoleDisplayRenderer();
                 _renderer.Init();
             }
             return _renderer;
