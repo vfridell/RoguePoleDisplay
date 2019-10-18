@@ -11,7 +11,7 @@ using RoguePoleDisplay.Repositories;
 namespace RoguePoleDisplay.Routines
 {
     [RoutineType(RoutineType.Dusk)]
-    class GettinGrouchy : Routine
+    public class GettinGrouchy : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {

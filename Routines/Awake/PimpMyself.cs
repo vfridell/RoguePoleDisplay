@@ -10,7 +10,7 @@ using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
-    class PimpMyself : Routine
+    public class PimpMyself : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {

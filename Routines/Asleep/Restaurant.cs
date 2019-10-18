@@ -11,7 +11,7 @@ using RoguePoleDisplay.Repositories;
 namespace RoguePoleDisplay.Routines
 {
     [RoutineType(RoutineType.Asleep)]
-    class Restaurant : Routine
+    public class Restaurant : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {

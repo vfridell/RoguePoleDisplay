@@ -61,7 +61,7 @@ namespace RoguePoleDisplay.Routines
             return CreateAndInitRoutine(routineType);
         }
 
-        private static Routine CreateAndInitRoutine(Type routineType)
+        public static Routine CreateAndInitRoutine(Type routineType)
         {
             Routine newRoutine = (Routine)Activator.CreateInstance(routineType);
             newRoutine.Init();
