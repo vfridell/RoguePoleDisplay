@@ -58,9 +58,6 @@ namespace RoguePoleDisplay.Input
                 _leapController.RemoveListener(leapInputListener);
             }
 
-            // give the user a chance to see the final choice
-            _interactiveRenderAction(value);
-
             return value > 0;
         }
 
@@ -91,9 +88,6 @@ namespace RoguePoleDisplay.Input
                 }
                 _leapController.RemoveListener(leapInputListener);
             }
-
-            // give the user a chance to see the final choice
-            _interactiveRenderAction(value);
 
             if (!menu.ValidChoice(value))
                 return null;

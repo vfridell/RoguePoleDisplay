@@ -17,7 +17,7 @@ namespace TestPoleDisplayInput
     {
         static void Main(string[] args)
         {
-            Routine testRoutine = RoutineFactory.CreateAndInitRoutine(typeof(PoopyTalk));
+            Routine testRoutine = RoutineFactory.CreateAndInitRoutine(typeof(Nouns));
             testRoutine.Run();
 
         }

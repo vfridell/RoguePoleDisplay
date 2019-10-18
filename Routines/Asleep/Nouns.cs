@@ -17,7 +17,7 @@ namespace RoguePoleDisplay.Routines
         {
             using (var memory = new Memory())
             {
-                var nouns = new List<string>() { "Sheep", "Trees", "Birds", "Cars", "Pillows", "Leaves", "PB&J", "Books", "Cookie", "Monsters", "Whaaa?!" };
+                var nouns = new List<string>() { "Bit", "Byte", "Stream", "Routine", "Program", "Function", "Render", "Download", "Upload", "Sideload", "huh." };
 
                 var face = new Face(RendererFactory.GetPreferredRenderer(), InputFactory.GetPreferredInput());
                 Interaction i = new Interaction();
