@@ -10,6 +10,7 @@ namespace RoguePoleDisplay.Routines
     public static class RoutineFactory
     {
         private static Dictionary<Type, RoutineTypeAttribute> _routinesTypes = new Dictionary<Type, RoutineTypeAttribute>();
+        private static Random rnd = new Random();
 
         static RoutineFactory()
         {
@@ -43,7 +44,7 @@ namespace RoguePoleDisplay.Routines
 
             if(routineTypes.Count() == 1) return CreateAndInitRoutine(routineTypes[0]);
 
-            int index = new Random().Next(0, routineTypes.Count);
+            int index = rnd.Next(0, routineTypes.Count);
             Type routineType = routineTypes[index];
             return CreateAndInitRoutine(routineType);
         }
@@ -56,11 +57,11 @@ namespace RoguePoleDisplay.Routines
 
         public static Routine GetCreateLoginRoutine()
         {
-            Type routineType = _routinesTypes.First<KeyValuePair<Type, RoutineTypeAttribute>>(t => t.Value.routineType == RoutineType.CreateLogin&& t.Value.order == 0).Key;
+            Type routineType = _routinesTypes.First<KeyValuePair<Type, RoutineTypeAttribute>>(t => t.Value.routineType == RoutineType.CreateLogin && t.Value.order == 0).Key;
             return CreateAndInitRoutine(routineType);
         }
 
-        private static Routine CreateAndInitRoutine(Type routineType)
+        public static Routine CreateAndInitRoutine(Type routineType)
         {
             Routine newRoutine = (Routine)Activator.CreateInstance(routineType);
             newRoutine.Init();

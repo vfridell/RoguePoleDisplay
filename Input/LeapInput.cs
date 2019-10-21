@@ -15,12 +15,13 @@ namespace RoguePoleDisplay.Input
 {
     public class LeapInput : IGetInput
     {
-        private LeapInputListener _leapInputListener;
         private Leap.Controller _leapController;
+        private EventWaitHandle _waitHandle = new AutoResetEvent(false);
+        private InputData _lastObservedInputData;
+
         public void Init()
         {
-            _leapInputListener = new LeapInputListener(RendererFactory.GetPreferredRenderer());
-            _leapController = new Controller(_leapInputListener);
+            _leapController = new Controller();
             _leapController.SetPolicyFlags(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
         }
 
@@ -29,33 +30,64 @@ namespace RoguePoleDisplay.Input
             throw new NotImplementedException();
         }
 
+        private Action<int> _interactiveRenderAction;
+
         public bool TryGetInteger(out int value, int millisecondTimeout)
         {
-            TaskCompletionSource<int> taskSource = new TaskCompletionSource<int>();
-            Task<int> t = taskSource.Task;
-            Task.Factory.StartNew(() => {
-                int fingers = GetFingers(5, 10, millisecondTimeout,
-                 (choice, renderer) =>
-                 {
-                     renderer.WritePosition(choice.ToString()[0], 19, 1);
-                     Console.WriteLine(choice.ToString());
-                 });
-                taskSource.SetResult(fingers);
-            });
-            value = t.Result;
-            return t.Result > 0;
+            _waitHandle.Reset();
+            _lastObservedInputData = new InputData();
+            _interactiveRenderAction = (choice) =>
+            {
+                RendererFactory.GetPreferredRenderer().WritePosition(choice.ToString()[0], 19, 1);
+            };
+
+            int queueLength = LeapInputListener.GetQueueLength(millisecondTimeout);
+            using (var leapInputListener = new LeapInputListener(queueLength, RendererFactory.GetPreferredRenderer()))
+            using (leapInputListener.Subscribe(this))
+            {
+                _leapController.AddListener(leapInputListener);
+                if (_waitHandle.WaitOne(millisecondTimeout))
+                {
+                    value = leapInputListener.LastXmitLeapData.LastNumEntered;
+                }
+                else // timed out
+                {
+                    // use the last observed value
+                    value = _lastObservedInputData.LastNumEntered;
+                }
+                _leapController.RemoveListener(leapInputListener);
+            }
+
+            return value > 0;
         }
 
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
-            var cancellationTokenSrc = new CancellationTokenSource(millisecondTimeout);
-            var value = GetFingersAsync(5, 10, cancellationTokenSrc.Token,
-                 (choice, renderer) =>
-                 {
-                     Console.WriteLine(choice.ToString());
-                     menu.Highlight(choice);
-                     renderer.DisplayMenu(menu);
-                 });
+            _waitHandle.Reset();
+            _lastObservedInputData = new InputData();
+            _interactiveRenderAction = (choice) =>
+            {
+                menu.Highlight(choice);
+                RendererFactory.GetPreferredRenderer().DisplayMenu(menu);
+            };
+
+            int value;
+            int queueLength = LeapInputListener.GetQueueLength(millisecondTimeout);
+            using (var leapInputListener = new LeapInputListener(queueLength, RendererFactory.GetPreferredRenderer()))
+            using (leapInputListener.Subscribe(this))
+            {
+                _leapController.AddListener(leapInputListener);
+                if (_waitHandle.WaitOne(millisecondTimeout))
+                {
+                    value = leapInputListener.LastXmitLeapData.LastNumEntered;
+                }
+                else // timed out
+                {
+                    // use the last observed value
+                    value = _lastObservedInputData.LastNumEntered;
+                }
+                _leapController.RemoveListener(leapInputListener);
+            }
 
             if (!menu.ValidChoice(value))
                 return null;
@@ -63,93 +95,20 @@ namespace RoguePoleDisplay.Input
                 return menu.GetMenuItem(value);
         }
 
-        private int GetFingersAsync(int secondsToHold, int numberOfChoices, CancellationToken cancellationToken, Action<int, IScreenRenderer> onRefresh)
+        public void OnNext(InputData value)
         {
-            IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
-            int numFingers = _leapInputListener.NumFingersAverage;
-
-            DateTime choiceTime = ResetTimer(secondsToHold);
-            while (DateTime.Now < choiceTime)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return numFingers;
-                }
-
-                int oldNumFingers = numFingers;
-                if (oldNumFingers != numFingers)
-                {
-                    onRefresh(numFingers, renderer);
-                    choiceTime = ResetTimer(secondsToHold);
-                }
-                else
-                {
-                    //onRefresh((int)frame.CurrentFramesPerSecond, renderer);
-                }
-            }
-
-            return numFingers;
+            _lastObservedInputData = value;
+            _interactiveRenderAction?.Invoke(value.LastNumEntered);
         }
 
-        private int GetFingers(int secondsToHold, int numberOfChoices, int millisecondTimeout, Action<int, IScreenRenderer> onRefresh)
+        public void OnError(Exception error)
         {
-            IScreenRenderer renderer = RendererFactory.GetPreferredRenderer();
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-                
-            int numFingers = -1;
-            DateTime choiceTime = ResetTimer(secondsToHold);
-            while (DateTime.Now < choiceTime )
-            {
-                // Get the most recent frame and report some basic information
-                Frame frame = _leapController.Frame();
-
-                if (sw.ElapsedMilliseconds >= millisecondTimeout)
-                {
-                    Console.WriteLine(string.Format("FPS: {0}", frame.CurrentFramesPerSecond));
-                    sw.Stop();
-                    return numFingers;
-                }
-
-                int oldNumFingers = numFingers;
-
-                if (!frame.Hands.IsEmpty)
-                {
-                    // Get the hands
-                    Hand hand1 = frame.Hands[0];
-                    Hand hand2 = frame.Hands[1];
-
-                    // Check if the hand has any fingers
-                    FingerList fingers = hand1.Fingers.Extended();
-                    if (!fingers.IsEmpty)
-                    {
-                        numFingers = fingers.Count;
-                    }
-
-                    fingers = hand2.Fingers.Extended();
-                    if (!fingers.IsEmpty)
-                    {
-                        numFingers += fingers.Count;
-                    }
-                }
-
-                if (oldNumFingers != numFingers)
-                {
-                    onRefresh(numFingers, renderer);
-                    choiceTime = ResetTimer(secondsToHold);
-                }
-                else
-                {
-                    //onRefresh((int)frame.CurrentFramesPerSecond, renderer);
-                }
-            }
-
-            return numFingers;
+            throw new Exception("OnError caught an exception", error);
         }
 
-        private DateTime ResetTimer(int secondsFromNow)
+        public void OnCompleted()
         {
-            return DateTime.Now.AddSeconds(secondsFromNow);
+            _waitHandle.Set();
         }
     }
 }

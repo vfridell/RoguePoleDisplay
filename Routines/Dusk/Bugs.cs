@@ -11,7 +11,7 @@ using RoguePoleDisplay.Repositories;
 namespace RoguePoleDisplay.Routines
 {
     [RoutineType(RoutineType.Dusk)]
-    class Bugs : Routine
+    public class Bugs : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {
@@ -38,7 +38,7 @@ namespace RoguePoleDisplay.Routines
                 face.SlowTalk(memory, "Is he listening?", "", 10, 2000);
                 face.SlowTalk(memory, "Shhhhh!","", 250);
                 ///////////////////////01234567890123456789/////////////////////
-                face.Talk(memory, "", "", 30000);
+                face.Talk(memory, "", "", 10000);
                 ////////////////////////////////////01234567890123456789/////////////////////
                 Interaction i = face.YesNo(memory, "He's still watching?");
                 if (i.PlayerAnswer == Interaction.Answer.Yes)

@@ -11,7 +11,7 @@ using RoguePoleDisplay.Models;
 namespace RoguePoleDisplay.Routines
 {
     [RoutineType(RoutineType.Login, 0)]
-    class PersonID : Routine
+    public class PersonID : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {

@@ -9,11 +9,14 @@ using RoguePoleDisplay.Renderers;
 using RoguePoleDisplay.Utilities;
 using RoguePoleDisplay.Repositories;
 using RoguePoleDisplay.Models;
+using log4net;
+using RoguePoleDisplay.Helpers;
 
 namespace RoguePoleDisplay
 {
     public class Face
     {
+        ILog _log = LogManager.GetLogger("RoguePoleDisplay");
         IScreenRenderer _renderer;
         IGetInput _input;
 
@@ -60,6 +63,7 @@ namespace RoguePoleDisplay
 
         public Interaction RememberSingleValue(Memory memory, string line1, string line2 = "", bool longTerm = false, int millisecondTimeout = 5000)
         {
+            LogHelper.Begin(_log, "RememberSingleValue");
             Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(line1, line2);
@@ -73,12 +77,14 @@ namespace RoguePoleDisplay
             if(result.ResultValue != -1)
                 memory.AddToMemory(result, longTerm);
             
+            LogHelper.End(_log, "RememberSingleValue");
             return result;
 
         }
 
         public Interaction GetSingleValue(Memory memory, string line1, string line2 = "", int millisecondTimeout = 5000)
         {
+            LogHelper.Begin(_log, "GetSingleValue");
             Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
             _renderer.Write(line1, line2);
@@ -89,11 +95,13 @@ namespace RoguePoleDisplay
                 result.ResultValue = intResult;
             }
 
+            LogHelper.End(_log, "GetSingleValue");
             return result;
         }
 
         public Interaction YesNo(Memory memory, string line1, bool longTerm = false, int millisecondTimeout = 10000)
         {
+            LogHelper.Begin(_log, "YesNo");
             Menu menu = new MenuYesNo(line1);
             Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
@@ -105,11 +113,13 @@ namespace RoguePoleDisplay
             if (result.ResultValue != -1)
                 memory.AddToMemory(result, longTerm);
 
+            LogHelper.End(_log, "YesNo");
             return result;
         }
 
         public Interaction TwoChoices(Memory memory, string line1, string choice1, string choice2, bool longTerm = false, int millisecondTimeout = 10000)
         {
+            LogHelper.Begin(_log, "TwoChoices");
             Menu menu = new MenuTwo(line1, choice1, choice2);
             Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
             _renderer.Clear();
@@ -124,6 +134,7 @@ namespace RoguePoleDisplay
             if (null != item)
                 result.ResultText = item.plainText;
 
+            LogHelper.End(_log, "TwoChoices");
             return result;
         }
 

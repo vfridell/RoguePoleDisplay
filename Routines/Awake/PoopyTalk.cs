@@ -11,7 +11,7 @@ using RoguePoleDisplay.Repositories;
 namespace RoguePoleDisplay.Routines
 {
     [RoutineType(RoutineType.Awake)]
-    class PoopyTalk : Routine
+    public class PoopyTalk : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
         {

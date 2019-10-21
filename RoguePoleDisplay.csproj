@@ -79,6 +79,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\LeapCSharp.NET4.0.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>packages\NHibernate.5.2.5\lib\net461\NHibernate.dll</HintPath>
     </Reference>
@@ -110,8 +113,11 @@
     <Compile Include="ConsciousnessStates\Friendly.cs" />
     <Compile Include="ConsciousnessStates\Half.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="Helpers\Unsubscriber.cs" />
     <Compile Include="InputListeners\ConsoleListener.cs" />
     <Compile Include="InputListeners\InputListener.cs" />
+    <Compile Include="Input\InputData.cs" />
     <Compile Include="InputListeners\LeapInputListener.cs" />
     <Compile Include="Input\InputFactory.cs" />
     <Compile Include="Input\LeapInput.cs" />

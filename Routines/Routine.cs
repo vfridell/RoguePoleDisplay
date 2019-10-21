@@ -49,10 +49,19 @@ namespace RoguePoleDisplay.Routines
             };
             if (finalInteraction.PlayerAnswer != Interaction.Answer.DidNotAnswer)
             {
-                result.FinalState = finalInteraction.Success ? RoutineFinalState.Success : RoutineFinalState.Failure;
+                result.FinalState = finalInteraction.Success ? RoutineFinalState.One : RoutineFinalState.Two;
             }
             memory.AddToMemory(result);
             return result;
+        }
+
+        protected bool CheckForAnything(Memory memory, Face face, string line1, string line2, int timeoutMS, out Interaction i)
+        {
+            i = face.RememberSingleValue(memory, line1, line2, false, timeoutMS);
+            if (i.PlayerAnswer != Interaction.Answer.DidNotAnswer)
+                return true;
+            else
+                return false;
         }
     }
 }
