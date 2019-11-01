@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoguePoleDisplay.Input
 {
-    public interface IGetInput : IObserver<InputData>
+    public interface IGetInput 
     {
         void Init();
         int GetInteger(int millisecondTimeout);

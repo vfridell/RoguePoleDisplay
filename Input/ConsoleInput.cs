@@ -11,44 +11,23 @@ namespace RoguePoleDisplay.Input
 {
     public class ConsoleInput : IGetInput
     {
-        Interaction _interaction;
-        bool _interactionHappened = false;
-        AutoResetEvent getInput = new AutoResetEvent(false);
-
         public int GetInteger(int millisecondTimeout)
         {
-            using (var consoleListener = new ConsoleListener())
-            {
-                _interaction = new Interaction();
-                consoleListener.InteractionHandled += consoleListener_InteractionHandled;
-                consoleListener.Start();
-                getInput.WaitOne(millisecondTimeout);
-                return _interaction.ResultValue;
-            }
-        }
-
-        void consoleListener_InteractionHandled(object sender, InteractionEventArgs e)
-        {
-            lock (_interaction)
-
-            {
-                _interaction = e.interaction;
-                _interactionHappened = true;
-                getInput.Set();
-            }
+            throw new NotImplementedException();
         }
 
         public bool TryGetInteger(out int value, int millisecondTimeout)
         {
-            using (var consoleListener = new ConsoleListener())
+            int num = WaitConsoleKey(millisecondTimeout).Result;
+            if (num == -1)
             {
-                _interactionHappened = false;
-                _interaction = new Interaction();
-                consoleListener.InteractionHandled += consoleListener_InteractionHandled;
-                consoleListener.Start();
-                getInput.WaitOne(millisecondTimeout);
-                value = _interaction.ResultValue;
-                return _interactionHappened;
+                value = 0;
+                return false;
+            }
+            else
+            {
+                value = num;
+                return true;
             }
         }
 
@@ -58,34 +37,65 @@ namespace RoguePoleDisplay.Input
 
         public MenuItem ChooseFromMenu(Menu menu, int millisecondTimeout)
         {
-            using (var consoleListener = new ConsoleListener())
+            int num = WaitConsoleKey(millisecondTimeout).Result;
+            if (menu.ValidChoice(num))
+                return menu.GetMenuItem(num);
+            else
+                return null;
+        }
+
+        private static async Task<int> WaitConsoleKey(int millisecondTimeout)
+        {
+            try
             {
-                _interactionHappened = false;
-                _interaction = new Interaction();
-                consoleListener.InteractionHandled += consoleListener_InteractionHandled;
-                consoleListener.Start();
-                Console.Write("Enter choice: ");
-                getInput.WaitOne(millisecondTimeout);
-                if (menu.ValidChoice(_interaction.ResultValue))
-                    return menu.GetMenuItem(_interaction.ResultValue);
-                else
-                    return null;
+                ConsoleKey key = default;
+                var cancellationTokenSrc = new CancellationTokenSource(millisecondTimeout);
+                await Task.Run(() => key = Console.ReadKey(true).Key, cancellationTokenSrc.Token);
+
+                int num = 0;
+                switch (key)
+                {
+                    case ConsoleKey.D0:
+                        num = 1;
+                        break;
+                    case ConsoleKey.D1:
+                        num = 1;
+                        break;
+                    case ConsoleKey.D2:
+                        num = 2;
+                        break;
+                    case ConsoleKey.D3:
+                        num = 3;
+                        break;
+                    case ConsoleKey.D4:
+                        num = 4;
+                        break;
+                    case ConsoleKey.D5:
+                        num = 5;
+                        break;
+                    case ConsoleKey.D6:
+                        num = 6;
+                        break;
+                    case ConsoleKey.D7:
+                        num = 7;
+                        break;
+                    case ConsoleKey.D8:
+                        num = 8;
+                        break;
+                    case ConsoleKey.D9:
+                        num = 9;
+                        break;
+                    default:
+                        num = -1;
+                        break;
+
+                }
+                return num;
             }
-        }
-
-        public void OnNext(InputData value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 

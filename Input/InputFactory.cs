@@ -14,8 +14,8 @@ namespace RoguePoleDisplay.Input
         {
             if (null == _input)
             {
-                //_input = new ConsoleInput();
-                _input = new LeapInput();
+                _input = new ConsoleInput();
+                //_input = new LeapInput();
                 _input.Init();
             }
             return _input;

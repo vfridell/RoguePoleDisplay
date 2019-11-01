@@ -13,7 +13,7 @@ using RoguePoleDisplay.InputListeners;
 
 namespace RoguePoleDisplay.Input
 {
-    public class LeapInput : IGetInput
+    public class LeapInput : IGetInput, IObserver<InputData>
     {
         private Leap.Controller _leapController;
         private EventWaitHandle _waitHandle = new AutoResetEvent(false);
