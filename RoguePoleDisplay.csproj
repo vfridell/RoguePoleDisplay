@@ -142,10 +142,12 @@
     <Compile Include="Repositories\MemoryKey.cs" />
     <Compile Include="Models\RoutineResult.cs" />
     <Compile Include="Repositories\SessionFactory.cs" />
+    <Compile Include="Routines\Asleep\SQLErrors.cs" />
     <Compile Include="Routines\Asleep\Restaurant.cs" />
     <Compile Include="Routines\Asleep\Existential.cs" />
     <Compile Include="Routines\Asleep\Nouns.cs" />
     <Compile Include="Routines\Asleep\Dreams.cs" />
+    <Compile Include="Routines\Asleep\SQLErrorData.cs" />
     <Compile Include="Routines\Awake\PimpMyself.cs" />
     <Compile Include="Routines\Awake\Directions.cs" />
     <Compile Include="Routines\Awake\PoopyTalk.cs" />

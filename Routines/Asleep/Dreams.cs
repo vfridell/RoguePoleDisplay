@@ -10,7 +10,6 @@ using RoguePoleDisplay.Repositories;
 
 namespace RoguePoleDisplay.Routines
 {
-    [RoutineType(RoutineType.Asleep)]
     public class Dreams : Routine
     {
         protected override RoutineResult RunConsciousRoutine()
