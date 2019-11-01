@@ -63,6 +63,7 @@ namespace RoguePoleDisplay.Input
 
         private void WaitConsoleKey()
         {
+            while (Console.KeyAvailable) Console.ReadKey();
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             int num = 0;
             switch (keyInfo.Key)
