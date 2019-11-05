@@ -1,5 +1,6 @@
 ﻿using Leap;
 using RoguePoleDisplay;
+using RoguePoleDisplay.Helpers;
 using RoguePoleDisplay.InputListeners;
 using RoguePoleDisplay.Models;
 using RoguePoleDisplay.Renderers;
@@ -17,6 +18,19 @@ namespace TestPoleDisplayInput
     {
         static void Main(string[] args)
         {
+                      //123456789012345678901234567890
+                      //012345678901234567890123456789
+            string s = "AN ILLEGAL XML CHARACTER hex-char WAS FOUND IN AN SQL/XML EXPRESSION OR FUNCTION ARGUMENT THAT BEGINS WITH STRING start-string";
+            StringLoop sloop = new StringLoop(s);
+            string empty = sloop.Substring(0, 0);
+            string empty2 = sloop.Substring(900, 0);
+            string normal = sloop.Substring(0, 10);
+            string normal2 = sloop.Substring(10, 5);
+            string endOver = sloop.Substring(s.Length - 5, 10);
+            string overAndOver = sloop.Substring(5, (s.Length * 3) + 5);
+            int shouldbe = (s.Length * 3) + 5;
+            int itis = overAndOver.Length;
+
             Routine testRoutine = RoutineFactory.CreateAndInitRoutine(typeof(Nouns));
             testRoutine.Run();
 

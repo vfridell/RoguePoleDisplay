@@ -107,5 +107,21 @@ namespace RoguePoleDisplay.Renderers
                 if (millisecondsBetweenSteps > 0) Task.Delay(millisecondsBetweenSteps);
             }
         }
+
+        public void Scroll(string line1, string line2, int msScrollDelay, int numLoops)
+        {
+            int onePos = 0;
+            int twoPos = 0;
+            for(int i=0; i<numLoops; i++)
+            {
+                do
+                {
+                    Write(line1.Substring(onePos++, 20), line2.Substring(twoPos++, 20));
+                    Task.Delay(msScrollDelay);
+                    if (onePos >= line1.Length) onePos = 0;
+                    if (twoPos >= line2.Length) twoPos = 0;
+                } while (onePos < line1.Length || twoPos < line2.Length);
+            }
+        }
     }
 }

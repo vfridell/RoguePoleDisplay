@@ -116,6 +116,7 @@
     <Compile Include="ConsciousnessStates\Half.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="Helpers\StringLoop.cs" />
     <Compile Include="Helpers\Unsubscriber.cs" />
     <Compile Include="Input\InputData.cs" />
     <Compile Include="InputListeners\LeapInputListener.cs" />

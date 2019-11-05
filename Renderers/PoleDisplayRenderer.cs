@@ -66,5 +66,10 @@ namespace RoguePoleDisplay.Renderers
         {
             _poleDisplay.Fade(c, millisecondsBetweenSteps);
         }
+
+        public void Scroll(string line1, string line2, int msScrollDelay, int numLoops)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -75,7 +75,7 @@ namespace RoguePoleDisplay.Routines
                         return MakeRoutineResult(memory, looking);
                     }
 
-                    looking = face.YesNo(memory, "Need the ARC?");
+                    looking = face.YesNo(memory, "Need the SSC?");
                     if (looking.PlayerAnswer == Interaction.Answer.Yes)
                     {
                         face.Talk(memory, "Go that way", "<==========         ");

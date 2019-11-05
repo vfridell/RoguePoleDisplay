@@ -16,5 +16,6 @@ namespace RoguePoleDisplay.Renderers
         void WritePosition(char c, int x, int y);
         void WriteProgressIndicator(int total, int start, int current);
         void Fade(char c, int millisecondsBetweenSteps);
+        void Scroll(string line1, string line2, int msScrollDelay, int numLoops);
     }
 }

@@ -82,6 +82,34 @@ namespace RoguePoleDisplay
 
         }
 
+        public Interaction RememberSingleValueWithScroll(Memory memory, string line1, string line2 = "", bool longTerm = false, int numLoops = 1, int msScrollDelay = 200)
+        {
+            LogHelper.Begin(_log, "RememberSingleValueWithScroll");
+            Interaction result = new Interaction() { Player = memory.GetCurrentPlayer() };
+            _renderer.Clear();
+
+            int maxIndex = Math.Max(line1.Length, line2.Length) * numLoops;
+            StringLoop part1 = new StringLoop(line1.PadRight(20) + " ");
+            StringLoop part2 = new StringLoop(line2.PadRight(20) + " ");
+            for (int i = 0; i <= maxIndex; i++)
+            {
+                _renderer.Write(part1.Substring(i, 20), part2.Substring(i, 20));
+                if (_input.TryGetInteger(out int intResult, msScrollDelay))
+                {
+                    result.DisplayText = (line1 + " " + line2).Trim();
+                    result.ResultValue = intResult;
+                }
+
+                if (result.ResultValue != -1)
+                {
+                    memory.AddToMemory(result, longTerm);
+                    return result;
+                }
+            }
+
+            return result;
+        }
+
         public Interaction GetSingleValue(Memory memory, string line1, string line2 = "", int millisecondTimeout = 5000)
         {
             LogHelper.Begin(_log, "GetSingleValue");
