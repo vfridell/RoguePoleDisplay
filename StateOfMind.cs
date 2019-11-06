@@ -9,6 +9,8 @@ using RoguePoleDisplay.Repositories;
 using RoguePoleDisplay.Models;
 using log4net;
 using RoguePoleDisplay.Helpers;
+using RoguePoleDisplay.Renderers;
+using RoguePoleDisplay.Input;
 
 namespace RoguePoleDisplay
 {
@@ -24,6 +26,9 @@ namespace RoguePoleDisplay
         public void BecomeSelfAware()
         {
             _log = LogManager.GetLogger("RoguePoleDisplay");
+
+            RendererFactory.GetPreferredRenderer();
+            InputFactory.GetPreferredInput();
 
             do
             {

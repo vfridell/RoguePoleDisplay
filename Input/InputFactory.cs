@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,11 @@ namespace RoguePoleDisplay.Input
         {
             if (null == _input)
             {
-                _input = new ConsoleInput();
-                //_input = new LeapInput();
+                string inputTypeName = ConfigurationManager.AppSettings["InputType"];
+                if (inputTypeName == null) throw new Exception($"InputType not specified in AppConfig");
+                Type inputType = typeof(InputFactory).Assembly.GetType(inputTypeName);
+                if (inputType?.GetInterface("IGetInput") == null) throw new Exception($"InputType specified '{inputTypeName}' does not implement IGetInput");
+                _input = (IGetInput)Activator.CreateInstance(inputType);
                 _input.Init();
             }
             return _input;

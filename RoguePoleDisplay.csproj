@@ -147,6 +147,7 @@
     <Compile Include="Routines\Asleep\Nouns.cs" />
     <Compile Include="Routines\Asleep\Dreams.cs" />
     <Compile Include="Routines\Asleep\SQLErrorData.cs" />
+    <Compile Include="Routines\Awake\Maze.cs" />
     <Compile Include="Routines\Awake\PimpMyself.cs" />
     <Compile Include="Routines\Awake\Directions.cs" />
     <Compile Include="Routines\Awake\PoopyTalk.cs" />
