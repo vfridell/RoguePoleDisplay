@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MazeAdjacencyGraph.dot" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,61 @@
+strict digraph Maze
+{
+graph[overlap = "false", splines = "true",rankdir=LR]
+
+node [style=filled,shape=Mrecord, fontname="courier bold"]
+DilapidatedHouse [fillcolor=white,label="Dilapidated House   |shade grips your back|run!                "]
+Basement [fillcolor=white,label="Basement            |Dark dark dark dark |if you are quiet...?"]
+FancyDorm [fillcolor=white,label="Fancy Dorm          |Gorgeous purgatory  |the best you can do?"]
+
+node [style=rounded,shape=record,fontname="courier"]
+LivingRoom [fillcolor=white,label="Living Room         |Moldy couch, cracked|TV. Encroaching dark"]
+Garage [fillcolor=white,label="Garage              |                    |                    "]
+Car [fillcolor=white,label="Car                 |                    |                    "]
+Road1 [fillcolor=white,label="Road                |                    |                    "]
+Road2 [fillcolor=white,label="Road                |                    |                    "]
+Road3 [fillcolor=white,label="Road                |                    |                    "]
+Bar [fillcolor=white,label="Bar                 |                    |                    "]
+Stadium [fillcolor=white,label="Stadium             |                    |                    "]
+Theatre [fillcolor=white,label="Theatre             |                    |                    "]
+Quadrangle [fillcolor=white,label="Quadrangle          |                    |                    "]
+MessHall [fillcolor=white,label="Mess Hall           |                    |                    "]
+BackParkingLot [fillcolor=white,label="Back Parking Lot    |                    |                    "]
+Greenhouse [fillcolor=white,label="Greenhouse          |                    |                    "]
+ScienceLab [fillcolor=white,label="Science Lab         |                    |                    "]
+Library [fillcolor=white,label="Library             |                    |                    "]
+TennisCourts [fillcolor=white,label="Tennis Courts       |                    |                    "]
+ComputerLab [fillcolor=white,label="Computer Lab        |                    |                    "]
+MedSimLab [fillcolor=white,label="Medical Sim Lab     |                    |                    "]
+Hills [fillcolor=white,label="A Big Hill          |                    |                    "]
+FancyArch [fillcolor=white,label="Fancy Giant Archway |                    |                    "]
+BaseballDiamond [fillcolor=white,label="Baseball Diamond    |                    |                    "]
+TrackAndField [fillcolor=white,label="Track and Field     |                    |                    "]
+Church [fillcolor=white,label="Church              |                    |                    "]
+
+DilapidatedHouse -> {LivingRoom Road1}
+LivingRoom -> {Basement Garage}
+Basement -> {}
+Garage -> {Car}
+Car -> {Road3}
+Road1 -> {Theatre Road2}
+Road2 -> {Stadium Road3}
+Road3 -> {Bar Road1}
+Bar -> {BackParkingLot}
+Stadium -> {BackParkingLot MessHall}
+Theatre -> {MessHall Quadrangle}
+Quadrangle -> {Library ScienceLab}
+MessHall -> {BackParkingLot Library}
+BackParkingLot -> {Hills TennisCourts}
+Greenhouse -> {FancyDorm}
+ScienceLab -> {Greenhouse ComputerLab}
+Library -> {ComputerLab MedSimLab}
+TennisCourts -> {Hills}
+ComputerLab -> {FancyDorm}
+MedSimLab -> {FancyDorm TrackAndField}
+Hills -> {FancyArch BaseballDiamond}
+FancyArch -> {BaseballDiamond}
+BaseballDiamond -> {TrackAndField}
+TrackAndField -> {FancyDorm Church}
+Church -> {FancyDorm}
+FancyDorm -> {}
+}
