@@ -9,8 +9,8 @@ FancyDorm [fillcolor=white,label="Fancy Dorm          |Gorgeous purgatory  |the 
 
 node [style=rounded,shape=record,fontname="courier"]
 LivingRoom [fillcolor=white,label="Living Room         |Moldy couch, cracked|TV. Encroaching dark"]
-Garage [fillcolor=white,label="Garage              |                    |                    "]
-Car [fillcolor=white,label="Car                 |                    |                    "]
+Garage [fillcolor=white,label="Garage              |Hoopty slouches here|Dark. Locked. Key!? "]
+Car [fillcolor=white,label="Car                 |Funky smelling      |                    "]
 Road1 [fillcolor=white,label="Road                |                    |                    "]
 Road2 [fillcolor=white,label="Road                |                    |                    "]
 Road3 [fillcolor=white,label="Road                |                    |                    "]
